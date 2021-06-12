@@ -45,26 +45,26 @@ The mailbox provider provides a so-called feedback loop {{?RFC6449}}. This feedb
 feedback about resulting complaints from their marketing mailings. Those complaints are based on manual user interaction e.g. IMAP movement to "Junk".
 
 As described in {{?RFC6449}} the registration for such a feedback loop needs to be done manually by a human at any FBL provider he wants to receive complaints from.
-Which can be well-understood time-consuming if there are new feedback loops rising up, or the mail sender wants to add new ip addresses or DKIM domains.
+Which can be quite time-consuming if there are new feedback loops rising up, or the mail sender wants to add new ip addresses or DKIM domains.
 Besides, a manual process isn't well suitable and/or doable for smaller mailbox providers.
 
-The change of such a complaint address e.g. due to an infrastructure change, is another problem. 
+The change of such a complaint address e.g. due to an infrastructure change is another problem. 
 Due to this manual process the mail sender needs to go through all providers again and delete his existing subscriptions and re-signup with the new complaint address.
 
 This document addresses this problem with a new email header.
 It extends the described complaint feedback loop recommendations in {{?RFC6449}} with an automated way to provide the complaint feedback loop address to mail receiver.
 
 Mail senders can add this header and willing mailbox provider can use this header to forward the generated report to the provided complaint address.
-The mail senders just needs to add a email header and isn't required to signup manually at every feedback loop provider.
+The mail sender just needs to add a email header and isn't required to signup manually at every feedback loop provider.
 Another benefit would be the mailbox provider doesn't need to develop a manual registration process and verification process.
 
-A new email header has been chosen over a new DNS record in favor to be able to simple distinguish between 
+A new email header has been chosen over a new DNS record in favour to be able to easily distinguish between
 multiple broadcast marketing list operators / mail senders, without the intervention of its users or administrators.
-For example, if a company uses multiple sending systems, each system can set this header on their own, without the need that a change has to be done by its users or administrators.
+For example, if a company uses multiple sending systems, each system can set this header on their own, without the need of a change that has to be done by its users or administrators.
 On the side of the mailbox provider, there is no need to do an additional DNS query to get the complaint address.
 
 This document has been created with GDPR and other data-regulation laws in mind and to address the resulting problems 
-in providing an automated complaint feedback loop address, as the email can contain personal data.
+in providing an automated complaint feedback loop address, as the email may contain personal data.
 
 Summarised this document has following goals:
 
@@ -88,9 +88,9 @@ The keyword "MBP" in this document is the abbreviation for "mailbox provider" an
 
 # Requirements
 
-## Complaining email
-The complaint email (sent by mail sender/broadcast marketing list operator) MUST have at least one valid {{!DKIM=RFC6376}}.
-The complaint email MUST be aligned as specified in {{!DMARC=RFC7489}}.
+## Complaining about an email
+The email (sent by mail sender/broadcast marketing list operator) about which a complaint should be sent MUST have at least one valid {{!DKIM=RFC6376}} signature, which covers the From-Header {{!MAIL=RFC5322}} domain. 
+The email about which a complaint should be sent MUST be aligned as specified in {{!DMARC=RFC7489}}.
 The Complaint-FBL-Address header MUST be covered by the signature, it MUST be included in the "h=" tag of the valid DKIM-Signature header field.
 
 If the message isn't properly aligned, nor it does have the required header coverage by {{!DKIM=RFC6376}}, the MBP SHOULD NOT send a report email.
@@ -126,7 +126,7 @@ The MBP SHOULD NOT send any report when an automatic decisions has been made, e.
 
 The MBP MUST validate and take action to address the described requirements in [Requirements](#requirements).
 
-# Complaint report
+# Complaint report {#complaint-report}
 The complaint report (sent by MBP to mail sender) MUST be an {{!ARF=RFC5965}} report. 
 The report MUST contain at least the Message-ID {{!MAIL=RFC5322}} or the header "Feedback-ID" of the complaining email.
 
@@ -166,12 +166,12 @@ The complaint FBL addresses can be for example flooded with spam.
 This is an existing problem with any existing email address and isn't newly created by this document.
 
 The broadcast marketing lists operator/mail sender must take appropriated measures.
-One possible countermeasure would be a rate limiting for the spam-delivering IP.
+One possible countermeasure would be a rate limit on the delivering IP.
 However, this should be done with caution, the normal FBL email traffic must not be impaired.
 
 ## Enumeration attacks / provoking unsubscription 
-A malicious person can send a bunch of forged ARF reports to a known complaint FBL addresses and tries to guess a Message-ID/Feedback-ID.
-He tries to do a mass-unsubscription of a complete marketing list. This is also an already existing problem with the current FBL implementation.
+A malicious person can send a bunch of forged ARF reports to a known complaint FBL addresses and try to guess a Message-ID/Feedback-ID.
+He might try to do a mass-unsubscription of a complete marketing list. This is also an already existing problem with the current FBL implementation.
 
 The receiving broadcast marketing lists operator/mail sender must take appropriated measures.
 
@@ -179,18 +179,26 @@ As a countermeasure it is recommended that the Message-ID and, if used, Feedback
 key, instead of a plain-text string, to make an enumeration attack impossible.
 
 If it is impossible for the broadcast marketing lists operator/mail sender to use a hard to forge component, the broadcast marketing lists operator/mail sender
-should take measures to avoid for example enumeration attacks.
+should take measures to avoid enumeration attacks.
 
 ## GDPR and other data-regulation laws
-With such a header there are maybe problems with a data-regulation law.
+Providing such a header itself doesn't produce a data-regulation law problem.
+The resulting ARF report, that is sent to the mail sender by the MBP, may conflict with a data-regulation law, as it may contain personal data. 
 
 This document already addresses some parts of this problem and describes a data-regulation law safe way to send a FBL report.
+As described in [](#complaint-report), the MBP may omit the complete body and/or headers and just sends the required fields.
 Nevertheless, each MBP must consider on their own, if this implementation is acceptable and complies with the existing data-regulation laws.
+
+As described in [](#complaint-report), it is also highly RECOMMENDED that the Message-ID and, if used, the Feedback-ID 
+includes a hard to forge component such as an {{?HMAC=RFC2104}} using a secret key, instead of a plain-text string.
+See [](#hmac-example) for an example.
+
+Using HMAC, or any other hard to forge component, ensures that only the mail sender has knowledge about the data.
 
 # IANA Considerations
 
 ## Complaint-FBL-Address
-The IANA is request to register a new header field, per {{?RFC3864}}, into the "Permanent Message Header Field Names" registry:
+The IANA is requested to register a new header field, per {{?RFC3864}}, into the "Permanent Message Header Field Names" registry:
 
 ~~~ abnf
 Header field name: Complaint-FBL-Address
@@ -205,7 +213,7 @@ Specification document: this document
 ~~~
 
 ## Feedback-ID
-The IANA is request to register a new header field, per {{?RFC3864}}, into the "Permanent Message Header Field Names" registry:
+The IANA is requested to register a new header field, per {{?RFC3864}}, into the "Permanent Message Header Field Names" registry:
 
 ~~~ abnf
 Header field name: Feedback-ID
@@ -220,13 +228,14 @@ Specification document: this document
 ~~~
 
 # Examples
+For simplicity the DKIM header has been shortened.
 
 ## Simple
 Email about the report will be generated:
 
 ~~~
 Return-Path: <sender@mailer.example.com>
-From: Awesome newsleter <newsletter@example.com>
+From: Awesome Newsletter <newsletter@example.com>
 To: me@example.net
 Subject: Super awesome deals for you
 Complaint-FBL-Address: <fbl@example.com>
@@ -252,7 +261,7 @@ Content-Type: text/rfc822; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
 Return-Path: <sender@mailer.example.com>
-From: Awesome newsleter <newsletter@example.com>
+From: Awesome Newsletter <newsletter@example.com>
 To: me@example.net
 Subject: Super awesome deals for you
 Complaint-FBL-Address: <fbl@example.com>
@@ -268,7 +277,7 @@ Email about the report will be generated:
 
 ~~~
 Return-Path: <sender@mailer.example.com>
-From: Awesome newsleter <newsletter@example.com>
+From: Awesome Newsletter <newsletter@example.com>
 To: me@example.net
 Subject: Super awesome deals for you
 Complaint-FBL-Address: <fbl@example.com>
@@ -295,6 +304,43 @@ Content-Type: text/rfc822-headers; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
 Feedback-ID: 111:222:333:4444
+------=_Part_240060962_1083385345.1592993161900--
+~~~
+
+## GDPR safe report with HMAC {#hmac-example}
+Email about the report will be generated:
+
+~~~
+Return-Path: <sender@mailer.example.com>
+From: Awesome Newsletter <newsletter@example.com>
+To: me@example.net
+Subject: Super awesome deals for you
+Complaint-FBL-Address: <fbl@example.com>
+Message-ID: <a37e51bf-3050-2aab-1234-543a0828d14a@mailer.example.com>
+Feedback-ID: 3789e1ae1938aa2f0dfdfa48b20d8f8bc6c21ac34fc5023d63f9e64a
+       43dfedc0
+Content-Type: text/plain; charset=utf-8
+
+This is a super awesome newsletter.
+~~~
+
+Resulting ARF report contains only the Feedback-ID:
+
+~~~
+Feedback-Type: abuse
+User-Agent: FBL/0.1
+Version: 0.1
+Original-Mail-From: sender@mailer.example.com
+Arrival-Date: Tue, 23 Jun 2020 06:31:38 GMT
+Reported-Domain: example.com
+Source-Ip: 10.10.10.10
+
+------=_Part_240060962_1083385345.1592993161900
+Content-Type: text/rfc822-headers; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+
+Feedback-ID: 3789e1ae1938aa2f0dfdfa48b20d8f8bc6c21ac34fc5023d63f9e64a
+       43dfedc0
 ------=_Part_240060962_1083385345.1592993161900--
 ~~~
 
