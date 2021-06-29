@@ -254,7 +254,7 @@ Version: 0.1
 Original-Mail-From: sender@mailer.example.com
 Arrival-Date: Tue, 23 Jun 2020 06:31:38 GMT
 Reported-Domain: example.com
-Source-Ip: 10.10.10.10
+Source-Ip: 192.0.2.1
 
 ------=_Part_240060962_1083385345.1592993161900
 Content-Type: text/rfc822; charset=UTF-8
@@ -297,7 +297,7 @@ Version: 0.1
 Original-Mail-From: sender@mailer.example.com
 Arrival-Date: Tue, 23 Jun 2020 06:31:38 GMT
 Reported-Domain: example.com
-Source-Ip: 10.10.10.10
+Source-Ip: 192.0.2.1
 
 ------=_Part_240060962_1083385345.1592993161900
 Content-Type: text/rfc822-headers; charset=UTF-8
@@ -333,7 +333,7 @@ Version: 0.1
 Original-Mail-From: sender@mailer.example.com
 Arrival-Date: Tue, 23 Jun 2020 06:31:38 GMT
 Reported-Domain: example.com
-Source-Ip: 10.10.10.10
+Source-Ip: 192.0.2.1
 
 ------=_Part_240060962_1083385345.1592993161900
 Content-Type: text/rfc822-headers; charset=UTF-8
