@@ -1,9 +1,8 @@
 ---
-title: "Complaint Feedback Loop Address in Email Headers"
+title: "Complaint Feedback Loop Address Header"
 abbrev: "CFBL Address Header"
 docname: draft-benecke-cfbl-address-header-00
 category: exp
-consensus: true
 
 ipr: trust200902
 area: art
