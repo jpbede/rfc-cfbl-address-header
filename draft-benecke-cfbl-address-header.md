@@ -45,15 +45,15 @@ Currently, providing and maintaining such an address is a manual to a time-consu
 --- middle
 
 # Introduction and Motivation
-For a long time there is a way for a mailbox provider to forward manual complaints back to the mail sender, which can be a also a mailbox provider, or an operator of a broadcast marekting list.
-The mailbox provider provides a so-called feedback loop {{?RFC6449}}. This feedback loop is being used to give e.g. operators of broadcast marketing lists 
-feedback about resulting complaints from their marketing mailings. Those complaints are based on manual user interaction e.g. IMAP movement to "Junk".
+For a long time there is a way for a mailbox provider to forward manual complaints back to the mail sender, which can be a mailbox provider, or an operator of a broadcast marketing list.
+The mailbox provider provides a so-called feedback loop {{?RFC6449}}. This feedback loop is being used to give e.g., operators of broadcast marketing lists 
+feedback about resulting complaints from their marketing mailings. Those complaints are based on manual user interaction e.g., IMAP movement to "Junk".
 
 As described in {{?RFC6449}} the registration for such a feedback loop needs to be done manually by a human at any mailbox provider who provides an FBL, and he wants to receive complaints from.
 This can be quite time-consuming if there are new feedback loops rising up, or the mail sender wants to add new ip addresses or DKIM domains.
 Besides, a manual process isn't well suitable and/or doable for smaller mailbox providers.
 
-The change of such a complaint address e.g. due to an infrastructure change is another problem. 
+The change of such a complaint address e.g., due to an infrastructure change is another problem. 
 Due to this manual process the mail sender needs to go through all providers again and delete his existing subscriptions and re-signup with the new complaint address.
 
 This document addresses this problem with a new email header.
@@ -80,7 +80,7 @@ Summarised this document has following goals:
 
 ## Difference to One-Click-Unsubscribe
 For good reasons there is already the One-Click-Unsubscribe {{?RFC8058}} signaling, which may have several interests in common with this document.
-However, this header requires the List-Unsubscribe header, which intention is to provide the unsubscription link of an list.
+However, this header requires the List-Unsubscribe header, which intention is to provide the unsubscription link of a list.
 For this reason, this header is only used by broadcast marketing list operator or mailing list operators, but not in normal email traffic.
 
 The main interest of this document is now to provide an automated way to signal a complaint feedback loop address to mailbox providers.
@@ -138,7 +138,7 @@ If the MBP wants to process the complaints and forwards it, he MUST query the Co
 
 By default, an {{!ARF=RFC5965}} compatible report MUST be sent when a manual action has been taken e.g., when a receiver marks a mail as spam, 
 by clicking the "This is spam"-button in any web portal or by moving a mail to junk folder, this includes also {{?IMAP=RFC3501}} and {{?POP3=RFC1939}} movements.
-The MBP SHALL NOT send any report when an automatic decisions has been made, e.g. spam filtering. 
+The MBP SHALL NOT send any report when an automatic decisions has been made e.g., spam filtering. 
 
 The MBP SHOULD send a {{XARF}} compatible report, if the mail sender requests it as described in [](#xarf-report).
 If this is not possible a {{!ARF=RFC5965}} compatible report MUST be sent.
