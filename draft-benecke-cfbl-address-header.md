@@ -102,9 +102,9 @@ The keyword "mail sender" in this document is used to describe the party who sen
 
 ## Complaining about an email
 The email (sent by mail sender to MBP) about which a complaint should be sent MUST have at least a valid {{!DKIM=RFC6376}} signature.
-The aforementioned valid DKIM signature MUST cover at least the Complaint-FBL-Address header domain. 
-It is RECOMMENDED that the DKIM signature aligns with the Complaint-FBL-Address header domain and the From header {{!MAIL=RFC5322}} domain where possible.
-The Complaint-FBL-Address header MUST be included in the "h=" tag of the aforementioned valid DKIM-Signature.
+The aforementioned valid DKIM signature MUST cover at least the CFBL-Address header domain. 
+It is RECOMMENDED that the DKIM signature aligns with the CFBL-Address header domain and the From header {{!MAIL=RFC5322}} domain where possible.
+The CFBL-Address header MUST be included in the "h=" tag of the aforementioned valid DKIM-Signature.
 
 If the message isn't properly aligned, nor it does have the required header coverage by the "h=" tag of a valid DKIM-Signature, the MBP SHALL NOT send a report email.
 
@@ -120,7 +120,7 @@ It is highly RECOMMENDED that the mail sender does further plausibility checks.
 # Implementation
 
 ## Mail senders {#mail-senders}
-A mail sender that wishes to receive complaints about their emails MUST place a Complaint-FBL-Address header in the message.
+A mail sender that wishes to receive complaints about their emails MUST place a CFBL-Address header in the message.
 The mail sender MAY place a CFBL-Feedback-ID header in the message out of various reasons.
 
 The receiving complaint FBL address, placed in the message, MUST accept by default {{!ARF=RFC5965}} compatible reports.
@@ -134,7 +134,7 @@ The mail sender MUST take action to address the described requirements in [Requi
 
 ## Mailbox provider {#mailbox-provider}
 An MBP MAY process the complaint and forward it to the complaint FBL address.
-If the MBP wants to process the complaints and forwards it, he MUST query the Complaint-FBL-Address header.
+If the MBP wants to process the complaints and forwards it, he MUST query the CFBL-Address header.
 
 By default, an {{!ARF=RFC5965}} compatible report MUST be sent when a manual action has been taken e.g., when a receiver marks a mail as spam, 
 by clicking the "This is spam"-button in any web portal or by moving a mail to junk folder, this includes also {{?IMAP=RFC3501}} and {{?POP3=RFC1939}} movements.
@@ -157,22 +157,22 @@ It is highly RECOMMENDED that, if used, the CFBL-Feedback-ID includes a hard to 
 key, instead of a plain-text string. 
 
 ## XARF compatible report {#xarf-report}
-A mail sender that wishes to receive a {{XARF}} compatible report, MUST append "report=xarf" to the [Complaint-FBL-Address header](#cfbl-address-header).
+A mail sender that wishes to receive a {{XARF}} compatible report, MUST append "report=xarf" to the [CFBL-Address header](#cfbl-address-header).
 The resulting header would be the following: 
 
 ~~~
-Complaint-FBL-Address: fbl@example.com; report=xarf
+CFBL-Address: fbl@example.com; report=xarf
 ~~~
 
 # Header Syntax
 
-## Complaint-FBL-Address {#cfbl-address-header}
+## CFBL-Address {#cfbl-address-header}
 The following ABNF imports fields, WSP, CRLF and addr-spec from {{!MAIL=RFC5322}}.
 
 ~~~ abnf
 fields /= cfbl-address
 
-cfbl-address = "Complaint-FBL-Address:" 0*1WSP addr-spec 
+cfbl-address = "CFBL-Address:" 0*1WSP addr-spec
                [";" 0*1WSP report-format] CRLF
 
 report-format = "report=" ("arf" / "xarf")
@@ -238,11 +238,11 @@ Using HMAC, or any other hard to forge component, ensures that only the mail sen
 
 # IANA Considerations
 
-## Complaint-FBL-Address
+## CFBL-Address
 The IANA is requested to register a new header field, per {{?RFC3864}}, into the "Permanent Message Header Field Names" registry:
 
 ~~~ abnf
-Header field name: Complaint-FBL-Address
+Header field name: CFBL-Address
   
 Applicable protocol: mail
 
@@ -279,12 +279,12 @@ Return-Path: <sender@mailer.example.com>
 From: Awesome Newsletter <newsletter@example.com>
 To: me@example.net
 Subject: Super awesome deals for you
-Complaint-FBL-Address: fbl@example.com; report=arf
+CFBL-Address: fbl@example.com; report=arf
 Message-ID: <a37e51bf-3050-2aab-1234-543a0828d14a@mailer.example.com>
 Content-Type: text/plain; charset=utf-8
 DKIM-Signature: v=1; a=rsa-sha256; d=example.com;
        h=Content-Type:Subject:From:To:Message-ID:
-       CFBL-Feedback-ID:Complaint-FBL-Address;
+       CFBL-Feedback-ID:CFBL-Address;
 
 This is a super awesome newsletter.
 ~~~
@@ -312,12 +312,12 @@ Return-Path: <sender@mailer.example.com>
 From: Awesome Newsletter <newsletter@example.com>
 To: me@example.net
 Subject: Super awesome deals for you
-Complaint-FBL-Address: fbl@example.com; report=arf
+CFBL-Address: fbl@example.com; report=arf
 Message-ID: <a37e51bf-3050-2aab-1234-543a0828d14a@mailer.example.com>
 Content-Type: text/plain; charset=utf-8
 DKIM-Signature: v=1; a=rsa-sha256; d=example.com;
        h=Content-Type:Subject:From:To:Message-ID:
-       CFBL-Feedback-ID:Complaint-FBL-Address;
+       CFBL-Feedback-ID:CFBL-Address;
 
 This is a super awesome newsletter.
 ------=_Part_240060962_1083385345.1592993161900--
@@ -331,13 +331,13 @@ Return-Path: <sender@mailer.example.com>
 From: Awesome Newsletter <newsletter@example.com>
 To: me@example.net
 Subject: Super awesome deals for you
-Complaint-FBL-Address: fbl@example.com; report=arf
+CFBL-Address: fbl@example.com; report=arf
 Message-ID: <a37e51bf-3050-2aab-1234-543a0828d14a@mailer.example.com>
 CFBL-Feedback-ID: 111:222:333:4444
 Content-Type: text/plain; charset=utf-8
 DKIM-Signature: v=1; a=rsa-sha256; d=example.com;
        h=Content-Type:Subject:From:To:Message-ID:
-       CFBL-Feedback-ID:Complaint-FBL-Address;
+       CFBL-Feedback-ID:CFBL-Address;
 
 This is a super awesome newsletter.
 ~~~
@@ -373,14 +373,14 @@ Return-Path: <sender@mailer.example.com>
 From: Awesome Newsletter <newsletter@example.com>
 To: me@example.net
 Subject: Super awesome deals for you
-Complaint-FBL-Address: fbl@example.com; report=arf
+CFBL-Address: fbl@example.com; report=arf
 Message-ID: <a37e51bf-3050-2aab-1234-543a0828d14a@mailer.example.com>
 CFBL-Feedback-ID: 3789e1ae1938aa2f0dfdfa48b20d8f8bc6c21ac34fc5023d
        63f9e64a43dfedc0
 Content-Type: text/plain; charset=utf-8
 DKIM-Signature: v=1; a=rsa-sha256; d=example.com;
        h=Content-Type:Subject:From:To:Message-ID:
-       CFBL-Feedback-ID:Complaint-FBL-Address;
+       CFBL-Feedback-ID:CFBL-Address;
 
 This is a super awesome newsletter.
 ~~~
