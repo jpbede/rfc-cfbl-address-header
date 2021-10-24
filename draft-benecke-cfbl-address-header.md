@@ -1,7 +1,7 @@
 ---
 title: "Complaint Feedback Loop Address Header"
 abbrev: "CFBL Address Header"
-docname: draft-benecke-cfbl-address-header-03
+docname: draft-benecke-cfbl-address-header-04
 category: exp
 
 ipr: trust200902
@@ -137,7 +137,7 @@ An MBP MAY process the complaint and forward it to the complaint FBL address.
 If the MBP wants to process the complaints and forwards it, he MUST query the CFBL-Address header.
 
 By default, an {{!ARF=RFC5965}} compatible report MUST be sent when a manual action has been taken e.g., when a receiver marks a mail as spam, 
-by clicking the "This is spam"-button in any web portal or by moving a mail to junk folder, this includes also {{?IMAP=RFC3501}} and {{?POP3=RFC1939}} movements.
+by clicking the "This is spam"-button in any web portal or by moving a mail to junk folder, this includes also {{?IMAP=RFC9051}} and {{?POP3=RFC1939}} movements.
 The MBP SHALL NOT send any report when an automatic decisions has been made e.g., spam filtering. 
 
 The MBP SHOULD send a {{XARF}} compatible report, if the mail sender requests it as described in [](#xarf-report).
