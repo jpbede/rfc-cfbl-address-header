@@ -127,7 +127,7 @@ The keyword "mail sender" in this document is used to describe the party who sen
 # Requirements
 
 ## Received email {#received-email}
-This section describes the requirements that a received e-mail, i.e. the e-mail that is sent from the e-mail sender to the MBP and about which a report is to be sent later, must meet.
+This section describes the requirements that a received email, i.e. the email that is sent from the email sender to the MBP and about which a report is to be sent later, must meet.
 
 ### Simple
 If the domain in the From: header {{!MAIL=RFC5322}} and the domain in the CFBL address header are identical, this domain MUST be covered by a valid {{!DKIM=RFC6376}} signature.
@@ -191,7 +191,7 @@ As part of this experiment, it is recommended to determine what plausibility and
 
 # Implementation
 
-## email senders {#mail-senders}
+## Email senders {#mail-senders}
 An email sender who wishes to receive complaints about their emails MUST include a CFBL-Address header in their messages.
 
 The receiving complaint FBL address specified in the messages MUST accept {{!ARF=RFC5965}} compatible reports by default.
