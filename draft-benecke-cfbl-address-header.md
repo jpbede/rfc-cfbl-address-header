@@ -1,7 +1,7 @@
 ---
 title: "Complaint Feedback Loop Address Header"
 abbrev: "CFBL Address Header"
-docname: draft-benecke-cfbl-address-header-04
+docname: draft-benecke-cfbl-address-header-05
 category: exp
 
 ipr: trust200902
@@ -37,60 +37,83 @@ informative:
 
 --- abstract
 
-This document describes a method to allow a mail sender to specify a complaint feedback loop address as an email header
-and how a mail receiver can use it. This document also defines the rules for processing and forwarding such a complaint.
-The motivation for this arises out of the absence of a standardized and automated way to provide a complaint feedback loop address to mailbox providers.
-Currently, providing and maintaining such an address is a manual to a time-consuming process for mail senders and mailbox providers.
+This document describes a method that allows a email sender to specify a complaint feedback loop (FBL) address as an email header and how a mail recipient can use it.
+This document also defines the rules for processing and forwarding such a complaint.
+The motivation for this arises out of the absence of a standardized and automated way to provide mailbox providers with an address for a complaint feedback loop.
+Currently, providing and maintaining such an address is a manual and time-consuming process for mailbox senders and providers.
+
+It is unclear, at the time of publication, whether the function provided by this document has widespread demand, and whether the
+mechanism offered will be adopted and found to be useful. Therefore, this is being published as an Experiment, looking for a constituency
+of implementers and deployers, and for feedback on the operational utility. The document is produced through the Independent RFC stream
+and was not subject to the IETF's approval process.
 
 --- middle
 
 # Introduction and Motivation
-For a long time there is a way for a mailbox provider to forward manual complaints back to the mail sender, which can be a mailbox provider, or an operator of a broadcast marketing list.
-The mailbox provider provides a so-called feedback loop {{?RFC6449}}. This feedback loop is being used to give e.g., operators of broadcast marketing lists 
-feedback about resulting complaints from their marketing mailings. Those complaints are based on manual user interaction e.g., IMAP movement to "Junk".
+For a long time there has been a way for a mailbox provider to forward manual complaints back to the email sender, which can be a mailbox provider or a broadcast marketing list operator.
+The mailbox provider provides what is called a feedback loop {{?RFC6449}}. This feedback loop is used, for example, to give operators of broadcast marketing lists 
+feedback on resulting complaints from their marketing mailings. These complaints are based on manual user interaction, e.g. IMAP movement to "junk".
 
-As described in {{?RFC6449}} the registration for such a feedback loop needs to be done manually by a human at any mailbox provider who provides an FBL, and he wants to receive complaints from.
-This can be quite time-consuming if there are new feedback loops rising up, or the mail sender wants to add new ip addresses or DKIM domains.
-Besides, a manual process isn't well suitable and/or doable for smaller mailbox providers.
+As described in {{?RFC6449}} the registration for such a feedback loop needs to be done manually by a human at any mailbox provider who provides an FBL, and they want to receive complaints from.
+This can be quite time-consuming if there are new feedback loops rising up, or the email sender wants to add new IP address or DKIM domain.
+In addition, a manual process is not well suited and/or feasible for smaller mailbox providers.
 
-The change of such a complaint address e.g., due to an infrastructure change is another problem. 
-Due to this manual process the mail sender needs to go through all providers again and delete his existing subscriptions and re-signup with the new complaint address.
+Changing such a complaint address, e.g. due to a change in infrastructure, is another problem.
+Due to this manual process, the email sender has to go through all providers again, delete his existing subscriptions and register again with the new complaint address.
 
-This document addresses this problem with a new email header.
-It extends the described complaint feedback loop recommendations in {{?RFC6449}} with an automated way to provide the complaint feedback loop address to mailbox providers.
+This document addresses this issue with a new email header.
+It extends the recommendations for the complaint feedback loop described in {{?RFC6449}} with an automated way to submit the complaint feedback loop address to mailbox providers.
 
-Mail senders can add this header and willing mailbox provider can use this header to forward the generated report to the provided complaint address.
-The mail sender just needs to add an email header and isn't required to signup manually at every feedback loop provider.
-Another benefit would be the mailbox provider doesn't need to develop a manual registration process and verification process.
+Mail senders can add this header, and willing mailbox providers can use this header to forward the generated report to the specified complaint address.
+The email sender only needs to add an email header and does not need to manually register with each feedback loop provider.
+Another benefit is that the mailbox provider does not need to develop a manual registration and verification process.
 
-A new email header has been chosen over a new DNS record in favour to be able to easily distinguish between
-multiple broadcast marketing list operators / mail senders, without the intervention of its users or administrators.
-For example, if a company uses multiple sending systems, each system can set this header on their own, without the need of a change that has to be done by its users or administrators.
-On the side of the mailbox provider, there is no need to do an additional DNS query to get the complaint address.
+A new email header has been prefixed to a new DNS record to easily distinguish between
+multiple broadcast marketing list operators / email senders without requiring user or administrator intervention.
+For example, if a company uses multiple mailing systems, each system can set this header itself without requiring any change by the users or administrators.
+No additional DNS query is required on the mailbox provider side to obtain the complaint address.
 
-This document has been created with GDPR and other data-regulation laws in mind and to address the resulting problems 
-in providing an automated complaint feedback loop address, as the email may contain personal data.
+This document has been prepared in compliance with the GDPR and other data protection laws to address the resulting issues
+when providing an automated address for a complaint feedback loop, as the email may contain personal data.
 
-Summarised this document has following goals:
+In summary, this document has the following objectives:
 
-* Allow mail senders to signal that there is a complaint address without a manual registration at all providers
-* Have a way for mailbox provider to get a complaint address without developing an own manual registration process
-* Be able to provide a complaint address to smaller mailbox providers who do not have a feedback loop registration process
-* Provide a GDPR compliant way for a complaint feedback loop
+* Allow email senders to signal that a complaint address exists without requiring manual registration with all providers.
+* Allow mailbox providers to obtain a complaint address without developing their own manual registration process.
+* Be able to provide a complaint address to smaller mailbox providers who do not have a feedback loop in place
+* Provide a GDPR compliant option for a complaint feedback loop.
+
+## Scope of this Experiment
+The CFBL-Address header and the CFBL-Feedback-ID header are an experiment. 
+Participation in this experiment consists of adding the CFBL-Address-Header on email sender side or by using the CFBl-Address-Header to send FBL reports to the provided address on mailbox provider side.
+Feedback on the results of this experiment can be emailed to the author or raised as an issue at https://github.com/jpbede/rfc-cfbl-address-header/.
+
+The goal of this experiment is to answer the following questions based on real-world deployments:
+
+- Is there interest among email sender and mailbox providers?
+- If the mailbox provider adds this capability, will it be used by the senders?
+- If the email sender adds this capability, will it be used by the mailbox provider?
+- Does the presence of the CFBL-Address/CFBL-Feedback-ID field introduce additional security issues?
+- What additional security measures/checks need to be performed at the mailbox provider before a complaint report is sent?
+- What additional security measures/checks need to be performed at the email sender after a complaint report is received?
+
+This experiment is considered successful if the CFBL-Address header has been implemented by multiple independent parties (mail sender and mailbox provider)
+and these parties successfully use the address specified in the header to exchange feedback loop reports.
+
+If this experiment is successful and these headers prove to be valuable and popular, it may be taken to the IETF for
+further discussion and revision. One possible outcome could be that a working group creates a specification for the standard track.
 
 ## Difference to One-Click-Unsubscribe
-For good reasons there is already the One-Click-Unsubscribe {{?RFC8058}} signaling, which may have several interests in common with this document.
-However, this header requires the List-Unsubscribe header, which intention is to provide the unsubscription link of a list.
-For this reason, this header is only used by broadcast marketing list operator or mailing list operators, but not in normal email traffic.
+For good reasons, the One-Click-Unsubscribe {{?RFC8058}} signaling already exists, which may have several interests in common with this document.
+However, this header requires the List-Unsubscribe header, whose purpose is to provide the link to unsubscribe from a list.
+For this reason, this header is only used by operators of broadcast marketing lists or mailing lists, not in normal email traffic.
 
-The main interest of this document is now to provide an automated way to signal a complaint feedback loop address to mailbox providers.
-It is the mail sender's obligation to consider on their own which measure they want to take after receiving a report, this is out of scope of this document.
+The main interest of this document now is to provide an automated way to signal mailbox providers an address for a complaint feedback loop.
+It is the obligation of the mail sender to decide for thyself what action to take after receiving a notification; this is not the subject of this document.
 
 # Definitions
 The keywords "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT", "SHOULD", "SHOULD NOT", "RECOMMENDED", "NOT RECOMMENDED", "MAY", and "OPTIONAL" in this 
 document are to be interpreted as described in BCP 14 {{!RFC2119}} {{!RFC8174}} when, and only when, they appear in all capitals, as shown here.
-
-The keyword "FBL" in this document is the abbreviation for "feedback loop" and will hereafter be used.
 
 The keyword "CFBL" in this document is the abbreviation for "complaint feedback loop" and will hereafter be used.
 
@@ -100,54 +123,96 @@ The keyword "mail sender" in this document is used to describe the party who sen
 
 # Requirements
 
-## Complaining about an email
-The email (sent by mail sender to MBP) about which a complaint should be sent MUST have at least a valid {{!DKIM=RFC6376}} signature.
-The aforementioned valid DKIM signature MUST cover at least the CFBL-Address header domain. 
-It is RECOMMENDED that the DKIM signature aligns with the CFBL-Address header domain and the From header {{!MAIL=RFC5322}} domain where possible.
+## Received email {#received-email}
+This section describes the requirements that a received e-mail, i.e. the e-mail that is sent from the e-mail sender to the MBP and about which a report is to be sent later, must meet.
+
+### Simple
+If the domain in the From: header {{!MAIL=RFC5322}} and the domain in the CFBL address header are identical, this domain MUST be covered by a valid {{!DKIM=RFC6376}} signature.
+This signature MUST meet the requirements described in [](#received-email-dkim-signature).
+
+The following example meets this case:
+
+~~~
+Return-Path: <sender@mailer.example.com>
+From: Awesome Newsletter <newsletter@example.com>
+To: me@example.net
+Subject: Super awesome deals for you
+CFBL-Address: fbl@example.com; report=arf
+Message-ID: <a37e51bf-3050-2aab-1234-543a0828d14a@mailer.example.com>
+Content-Type: text/plain; charset=utf-8
+DKIM-Signature: v=1; a=rsa-sha256; d=example.com;
+       h=Content-Type:Subject:From:To:Message-ID:
+       CFBL-Feedback-ID:CFBL-Address;
+
+This is a super awesome newsletter.
+~~~
+
+### Complex
+If the domain in From: header {{!MAIL=RFC5322}}, of the email sent by email sender to MBP, differs from the domain in the CFBL-Address header, 
+the domain of the CFBL-Address header MUST be covered by an additional valid {{!DKIM=RFC6376}} signature.
+Both signatures MUST meet the requirements described in [](#received-email-dkim-signature).
+
+The following example meets this case:
+
+~~~
+Return-Path: <sender@super-saas-mailer.com>
+From: Awesome Newsletter <newsletter@example.com>
+To: me@example.net
+Subject: Super awesome deals for you
+CFBL-Address: fbl@super-saas-mailer.com; report=arf
+Message-ID: <a37e51bf-3050-2aab-1234-543a0828d14a@mailer.example.com>
+Content-Type: text/plain; charset=utf-8
+DKIM-Signature: v=1; a=rsa-sha256; d=example.com;
+       h=Content-Type:Subject:From:To:Message-ID:
+       CFBL-Feedback-ID:CFBL-Address;
+DKIM-Signature: v=1; a=rsa-sha256; d=super-saas-mailer.com;
+       h=Content-Type:Subject:From:To:Message-ID:
+       CFBL-Feedback-ID:CFBL-Address;
+
+This is a super awesome newsletter.
+~~~
+
+### DKIM signature {#received-email-dkim-signature}
 The CFBL-Address header MUST be included in the "h=" tag of the aforementioned valid DKIM-Signature.
+When the CFBL-Feedback-ID header is used, it MUST also be included in the "h=" tag of the aforementioned valid DKIM signature.
 
-If the message isn't properly aligned, nor it does have the required header coverage by the "h=" tag of a valid DKIM-Signature, the MBP SHALL NOT send a report email.
-
-This ensures that only reports are sent to the complaint address that are based on an authenticated email.
+If the domain has neither the required coverage by a valid DKIM signature nor the required header coverage by the "h=" tag, the MBP SHALL NOT send a report email.
 
 ## Report email
-The report email (sent by MBP to mail sender) MUST have a valid {{!DKIM=RFC6376}} signature and MUST cover the From header {{!MAIL=RFC5322}} domain.
+The report email (sent by MBP to email sender) MUST have a valid {{!DKIM=RFC6376}} signature. 
+The aforementioned valid DKIM signature MUST cover the From: header {{!MAIL=RFC5322}} domain, from which the report is sent to the email sender. 
 
-If the message does not have the required valid {{!DKIM=RFC6376}}, the mail sender SHALL NOT process this email.
+If the message does not have the required valid {{!DKIM=RFC6376}} signature, the email sender SHALL NOT process this complaint report.
 
-It is highly RECOMMENDED that the mail sender does further plausibility checks.
+As part of this experiment, it is recommended to determine what plausibility and security checks are useful and achievable.
 
 # Implementation
 
-## Mail senders {#mail-senders}
-A mail sender that wishes to receive complaints about their emails MUST place a CFBL-Address header in the message.
-The mail sender MAY place a CFBL-Feedback-ID header in the message out of various reasons.
+## email senders {#mail-senders}
+An email sender who wishes to receive complaints about their emails MUST include a CFBL-Address header in their messages.
 
-The receiving complaint FBL address, placed in the message, MUST accept by default {{!ARF=RFC5965}} compatible reports.
+The receiving complaint FBL address specified in the messages MUST accept {{!ARF=RFC5965}} compatible reports by default.
+The email sender can OPTIONAL request a {{XARF}}-compatible report if it can only process such, as described in [](#xarf-report).
+The MBP MAY send a {{XARF}} compatible report if it is technically possible for them to do so, otherwise a {{!ARF=RFC5965}} compatible report will be sent.
 
-The mail sender can OPTIONAL request, as described in [](#xarf-report), a {{XARF}} compatible report.
-The MBP MAY send a {{XARF}} compatible report, if it is technical possible for him, otherwise a {{!ARF=RFC5965}} compatible reports will be sent.
+It is strongly RECOMMENDED that these reports be processed automatically. Each sender must decide for themselves what action to take after receiving a report.
 
-It is highly RECOMMENDED processing these reports automatically. Each mail sender must consider on their own which measure they take after receiving a report.
-
-The mail sender MUST take action to address the described requirements in [Requirements](#requirements).
+The email sender MUST take action to address the described requirements in [Requirements](#requirements).
 
 ## Mailbox provider {#mailbox-provider}
-An MBP MAY process the complaint and forward it to the complaint FBL address.
-If the MBP wants to process the complaints and forwards it, he MUST query the CFBL-Address header.
+If the MBP wants to process the complaints and forward it, they MUST query the CFBL-Address header and forward the report to the complaint FBL address.
 
 By default, an {{!ARF=RFC5965}} compatible report MUST be sent when a manual action has been taken e.g., when a receiver marks a mail as spam, 
-by clicking the "This is spam"-button in any web portal or by moving a mail to junk folder, this includes also {{?IMAP=RFC9051}} and {{?POP3=RFC1939}} movements.
+by clicking the "This is spam"-button in any web portal or by moving a mail to junk folder, this also includes {{?IMAP=RFC9051}} and {{?POP3=RFC1939}} movements.
 The MBP SHALL NOT send any report when an automatic decisions has been made e.g., spam filtering. 
 
-The MBP SHOULD send a {{XARF}} compatible report, if the mail sender requests it as described in [](#xarf-report).
-If this is not possible a {{!ARF=RFC5965}} compatible report MUST be sent.
+The MBP MUST send a {{XARF}} compatible report when the email sender requests it as described in [](#xarf-report).
+If it is not possible for the MBP to send a {{XARF}} compatible report as requested, a {{!ARF=RFC5965}} compatible report MUST be sent.
 
 The MBP MUST validate and take action to address the described requirements in [Requirements](#requirements).
 
 # Complaint report {#complaint-report}
-The complaint report (sent by MBP to mail sender) MUST be an {{!ARF=RFC5965}} report by default.
-The complaint report MAY be an {{XARF}} report, if the mail sender requests it, and the MBP can send it.
+The complaint report MAY be a {{XARF}} report if the email sender requests it, and it is technically possible for the MBP to do so, otherwise the complaint report MUST be a {{!ARF=RFC5965}} report.
 
 The report MUST contain at least the Message-ID {{!MAIL=RFC5322}}. If present, the header "CFBL-Feedback-ID" of the complaining email MUST be added additionally.
 
@@ -157,8 +222,8 @@ It is highly RECOMMENDED that, if used, the CFBL-Feedback-ID includes a hard to 
 key, instead of a plain-text string. 
 
 ## XARF compatible report {#xarf-report}
-A mail sender that wishes to receive a {{XARF}} compatible report, MUST append "report=xarf" to the [CFBL-Address header](#cfbl-address-header).
-The resulting header would be the following: 
+A email sender wishing to receive a {{XARF}} compliant report MUST append "report=xarf" to the [CFBL-Address-Header](#cfbl-address-header).
+The resulting header would look like the following:
 
 ~~~
 CFBL-Address: fbl@example.com; report=xarf
@@ -193,53 +258,60 @@ fid = 1*(atext / ":")
 This section discusses possible security issues, and their possible solutions, of a complaint FBL address header.
 
 ## Attacks on the FBL address
-As any other email address, a complaint FBL addresses can be an attack vector for malicious emails. 
-The complaint FBL addresses can be for example flooded with spam. 
-This is an existing problem with any existing email address and isn't newly created by this document.
+Like any other email address, a complaint FB address can be an attack vector for malicious emails.
+For example, complaint FB addresses can be flooded with spam.
+This is an existing problem with any existing email address and is not created by this document.
 
-The mail sender must take appropriated measures.
-One possible countermeasure would be a rate limit on the delivering IP.
-However, this should be done with caution, the normal FBL email traffic must not be impaired.
+The e-mail sender must take appropriate measures.
+One possible countermeasure would be a rate limit for the delivering IP.
+However, this should be done with caution; normal FBL e-mail traffic must not be affected.
 
 ## Automatic suspension of an account
-Sending a FBL report against a mailbox may lead into an inaccessibility for the account owner, if there is a too quick automatic account suspension. 
-For example, someone sends an invitation to his friends. For somewhat reason someone marks this mail as spam.
-Now, if there is a too quick automatic account suspension in place, the senders account will be suspended, and the sender can't access his mails anymore.
+Sending an FBL report against a mailbox can cause the account holder to be unreachable if an automatic account suspension occurs too quickly.
+An example: someone sends an invitation to his friends. For some reason, someone marks this mail as spam.
+Now, if there is too fast automatic account suspension, the sender's account will be blocked and the sender will not be able to access his mails.
 
-MBPs and mail senders MUST take appropriate measures to prevent this.
-MBPs and mail senders have therefore, mostly proprietary, ways to evaluate the trustworthiness of an account.
-For example MBPs and mail senders can consider the account age and/or any other account suspension that happened beforehand, before an account gets suspended.
+MBPs and email senders must take appropriate measures to prevent this.
+MBPs and email senders therefore have, mostly proprietary, ways to assess the trustworthiness of an account.
+For example, MBPs and email senders may take into account the age of the account and/or any previous account suspension before suspending an account.
 
 ## Enumeration attacks / provoking unsubscription 
-A malicious person can send a bunch of forged ARF reports to a known complaint FBL addresses and try to guess a Message-ID/CFBL-Feedback-ID.
-He might try to do a mass-unsubscription/suspension, if there is such an automatic in place.
-This is also an already existing problem with the current FBL implementation and/or the One-Click-Unsubscription {{?RFC8058}}.
+A malicious person may send a series of spoofed ARF messages to known complaint FB addresses and attempt to guess a Message-ID/CFBL-Feedback-ID or any other identifiers.
+The malicious person may attempt to mass unsubscribe/suspend if such an automated system is in place.
+This is also an existing problem with the current FBL implementation and/or One-Click Unsubscription {{?RFC8058}}.
 
-The receiving mail sender MUST take appropriated measures.
+The sender of the received email must take appropriate measures.
+As a countermeasure, it is recommended that the CFBL-Feedback-ID, if used, use a hard-to-forge component such as a {{?HMAC=RFC2104}} with a secret
+key instead of a plaintext string to make an enumeration attack impossible.
 
-As a countermeasure it is recommended that the Message-ID and, if used, CFBL-Feedback-ID uses a hard to forge component such as an {{?HMAC=RFC2104}} using a secret
-key, instead of a plain-text string, to make an enumeration attack impossible.
-
-If it is impossible for the mail sender to use a hard to forge component, the mail sender should take measures to avoid enumeration attacks.
+If it is impossible for the email sender to use a component that is difficult to fake, they should take steps to avoid enumeration attacks.
 
 ## GDPR and other data-regulation laws
-Providing such a header itself doesn't produce a data-regulation law problem.
-The resulting ARF report, that is sent to the mail sender by the MBP, may conflict with a data-regulation law, as it may contain personal data. 
+The provision of such a header itself does not pose a data protection issue.
+The resulting ARF report sent by the MBP to the email sender may violate a data protection law because it may contain personal data.
 
-This document already addresses some parts of this problem and describes a data-regulation law safe way to send a FBL report.
-As described in [](#complaint-report), the MBP may omit the complete body and/or headers and just sends the required fields.
-Nevertheless, each MBP must consider on their own, if this implementation is acceptable and complies with the existing data-regulation laws.
+This document already addresses some parts of this problem and describes a privacy-safe way to send a FBL report.
+As described in [](#complaint-report), the MBP can omit the entire body and/or header and send only the required fields.
+Nevertheless, each MBP must consider for itself whether this implementation is acceptable and complies with existing privacy laws.
 
-As described in [](#complaint-report), it is also highly RECOMMENDED that the Message-ID and, if used, the CFBL-Feedback-ID 
-includes a hard to forge component such as an {{?HMAC=RFC2104}} using a secret key, instead of a plain-text string.
+As described in [](#complaint-report), it is also strongly RECOMMENDED that the message ID and, if used, the CFBL feedback ID.
+contain a component that is difficult to forge, such as a {{?HMAC=RFC2104}} that uses a secret key, rather than a plaintext string.
 See [](#hmac-example) for an example.
 
-Using HMAC, or any other hard to forge component, ensures that only the mail sender has knowledge about the data.
+Using HMAC, or any other hard to forge component, ensures that only the email sender has knowledge about the data.
+
+## Abusing for Validity and Existence Queries
+An additional privacy issue may be that this mechanism is abused to determine the validity and existence of an email address.
+The main goal of the "early" marketing emails was to establish the validity and existence of an email address.
+Now, if the MBP has an automatic process to generate a complaint report for a received email, it may not be doing the mailbox owner any favors.
+
+The receiving MBP must take appropriate measures. One possible countermeasure can be, for example, pre-existing reputation data, usually proprietary data.
+Using this data, the MBP can assess the trustworthiness of an email sender and decide whether to send a complaint report based on this information.
 
 # IANA Considerations
 
 ## CFBL-Address
-The IANA is requested to register a new header field, per {{?RFC3864}}, into the "Permanent Message Header Field Names" registry:
+The IANA is requested to register a new header field, per {{?RFC3864}}, into the "Provisional Message Header Field Names" registry:
 
 ~~~ abnf
 Header field name: CFBL-Address
@@ -254,7 +326,7 @@ Specification document: this document
 ~~~
 
 ## CFBL-Feedback-ID
-The IANA is requested to register a new header field, per {{?RFC3864}}, into the "Permanent Message Header Field Names" registry:
+The IANA is requested to register a new header field, per {{?RFC3864}}, into the "Provisional Message Header Field Names" registry:
 
 ~~~ abnf
 Header field name: CFBL-Feedback-ID
