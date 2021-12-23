@@ -40,7 +40,7 @@ informative:
 This document describes a method that allows a email sender to specify a complaint feedback loop (FBL) address as an email header and how a mail recipient can use it.
 This document also defines the rules for processing and forwarding such a complaint.
 The motivation for this arises out of the absence of a standardized and automated way to provide mailbox providers with an address for a complaint feedback loop.
-Currently, providing and maintaining such an address is a manual and time-consuming process for mailbox senders and providers.
+Currently, providing and maintaining such an address is a manual and time-consuming process for mail senders and providers.
 
 It is unclear, at the time of publication, whether the function provided by this document has widespread demand, and whether the
 mechanism offered will be adopted and found to be useful. Therefore, this is being published as an Experiment, looking for a constituency
