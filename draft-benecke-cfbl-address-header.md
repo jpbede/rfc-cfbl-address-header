@@ -258,8 +258,8 @@ fid = 1*(atext / ":")
 This section discusses possible security issues, and their possible solutions, of a complaint FBL address header.
 
 ## Attacks on the FBL address
-Like any other email address, a complaint FB address can be an attack vector for malicious emails.
-For example, complaint FB addresses can be flooded with spam.
+Like any other email address, a complaint FBL address can be an attack vector for malicious emails.
+For example, complaint FBL addresses can be flooded with spam.
 This is an existing problem with any existing email address and is not created by this document.
 
 The e-mail sender must take appropriate measures.
@@ -276,7 +276,7 @@ MBPs and email senders therefore have, mostly proprietary, ways to assess the tr
 For example, MBPs and email senders may take into account the age of the account and/or any previous account suspension before suspending an account.
 
 ## Enumeration attacks / provoking unsubscription 
-A malicious person may send a series of spoofed ARF messages to known complaint FB addresses and attempt to guess a Message-ID/CFBL-Feedback-ID or any other identifiers.
+A malicious person may send a series of spoofed ARF messages to known complaint FBL addresses and attempt to guess a Message-ID/CFBL-Feedback-ID or any other identifiers.
 The malicious person may attempt to mass unsubscribe/suspend if such an automated system is in place.
 This is also an existing problem with the current FBL implementation and/or One-Click Unsubscription {{?RFC8058}}.
 
