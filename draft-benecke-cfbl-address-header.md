@@ -37,8 +37,8 @@ informative:
 
 --- abstract
 
-This document describes a method that allows a email sender to specify a complaint feedback loop (FBL) address as an email header and how a mail recipient can use it.
-This document also defines the rules for processing and forwarding such a complaint.
+This document describes a method that allows an email sender to specify a complaint feedback loop (FBL) address as an email header.
+Also it defines the rules for processing and forwarding such a complaint.
 The motivation for this arises out of the absence of a standardized and automated way to provide mailbox providers with an address for a complaint feedback loop.
 Currently, providing and maintaining such an address is a manual and time-consuming process for mail senders and providers.
 
@@ -50,23 +50,26 @@ and was not subject to the IETF's approval process.
 --- middle
 
 # Introduction and Motivation
-For a long time there has been a way for a mailbox provider to forward manual complaints back to the email sender, which can be a mailbox provider or a broadcast marketing list operator.
-The mailbox provider provides what is called a feedback loop {{?RFC6449}}. This feedback loop is used, for example, to give operators of broadcast marketing lists 
-feedback on resulting complaints from their marketing mailings. These complaints are based on manual user interaction, e.g. IMAP movement to "junk".
+For a long time there has been a way for a mailbox provider to forward manual complaints back to the email sender.
+The mailbox provider provides what is called a feedback loop {{?RFC6449}}. 
+This feedback loop is used to give operators of, e.g. broadcast marketing lists, feedback on resulting complaints from their marketing mailings.
+These complaints are based on manual user interaction, e.g.  IMAP movement to "junk".
 
-As described in {{?RFC6449}} the registration for such a feedback loop needs to be done manually by a human at any mailbox provider who provides an FBL, and they want to receive complaints from.
+As described in {{?RFC6449}} the registration for such a feedback loop needs to be done manually by a human at any mailbox provider who provides a FBL.
+If there are new feedback loops rising up, or the email sender wants to add a new IP address or DKIM domain this whole 
+process can be quite time-consuming, a manual process which in turn makes it not well suited and/or feasible for smaller mailbox providers.
+
 This can be quite time-consuming if there are new feedback loops rising up, or the email sender wants to add new IP address or DKIM domain.
 In addition, a manual process is not well suited and/or feasible for smaller mailbox providers.
 
-Changing such a complaint address, e.g. due to a change in infrastructure, is another problem.
-Due to this manual process, the email sender has to go through all providers again, delete his existing subscriptions and register again with the new complaint address.
+Because of the manual process involved, the email sender has to go through all providers again, delete his existing subscriptions and register with their new complaint address.
 
 This document addresses this issue with a new email header.
-It extends the recommendations for the complaint feedback loop described in {{?RFC6449}} with an automated way to submit the complaint feedback loop address to mailbox providers.
+It extends the recommendations for the complaint feedback loop described in {{?RFC6449}} with an automated way to submit the necessary information to mailbox providers.
 
-Mail senders can add this header, and willing mailbox providers can use this header to forward the generated report to the specified complaint address.
+Mail senders can add this header, willing mailbox providers can use it to forward the generated report to the specified complaint address.
 The email sender only needs to add an email header and does not need to manually register with each feedback loop provider.
-Another benefit is that the mailbox provider does not need to develop a manual registration and verification process.
+The elimination of a manual registration and verification process would be another advantage for the mailbox providers.
 
 A new email header has been prefixed to a new DNS record to easily distinguish between
 multiple broadcast marketing list operators / email senders without requiring user or administrator intervention.
@@ -109,7 +112,7 @@ However, this header requires the List-Unsubscribe header, whose purpose is to p
 For this reason, this header is only used by operators of broadcast marketing lists or mailing lists, not in normal email traffic.
 
 The main interest of this document now is to provide an automated way to signal mailbox providers an address for a complaint feedback loop.
-It is the obligation of the mail sender to decide for thyself what action to take after receiving a notification; this is not the subject of this document.
+It is the obligation of the mail sender to decide for themself what action to take after receiving a notification; this is not the subject of this document.
 
 # Definitions
 The keywords "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT", "SHOULD", "SHOULD NOT", "RECOMMENDED", "NOT RECOMMENDED", "MAY", and "OPTIONAL" in this 
@@ -301,11 +304,10 @@ See [](#hmac-example) for an example.
 Using HMAC, or any other hard to forge component, ensures that only the email sender has knowledge about the data.
 
 ## Abusing for Validity and Existence Queries
-An additional privacy issue may be that this mechanism is abused to determine the validity and existence of an email address.
-The main goal of the "early" marketing emails was to establish the validity and existence of an email address.
+This mechanism could be abused to determine the validity and existence of an email address, which exhibits another potential privacy issue.
 Now, if the MBP has an automatic process to generate a complaint report for a received email, it may not be doing the mailbox owner any favors.
 
-The receiving MBP must take appropriate measures. One possible countermeasure can be, for example, pre-existing reputation data, usually proprietary data.
+The receiving MBP must take appropriate measures. One possible countermeasure could be, for example, pre-existing reputation data, usually proprietary data.
 Using this data, the MBP can assess the trustworthiness of an email sender and decide whether to send a complaint report based on this information.
 
 # IANA Considerations
