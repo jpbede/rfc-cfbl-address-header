@@ -155,6 +155,9 @@ If the domain in From: header {{!MAIL=RFC5322}}, of the email sent by email send
 the domain of the CFBL-Address header MUST be covered by an additional valid {{!DKIM=RFC6376}} signature.
 Both signatures MUST meet the requirements described in [](#received-email-dkim-signature).
 
+This double DKIM signature ensures that both the domain owner of the From: domain and the domain owner of the CFBL-Address: domain
+agree to receive the complaint reports on the address from the CFBL-Address: header.
+
 The following example meets this case:
 
 ~~~
