@@ -306,6 +306,7 @@ Using HMAC, or any other hard to forge component, ensures that only the email se
 ## Abusing for Validity and Existence Queries
 This mechanism could be abused to determine the validity and existence of an email address, which exhibits another potential privacy issue.
 Now, if the MBP has an automatic process to generate a complaint report for a received email, it may not be doing the mailbox owner any favors.
+As the MBP now generates an automatic complaint report for the received email, the MBP now proves to the email sender that this mailbox exists for sure, because it is based on a manual action of the mailbox owner.
 
 The receiving MBP must take appropriate measures. One possible countermeasure could be, for example, pre-existing reputation data, usually proprietary data.
 Using this data, the MBP can assess the trustworthiness of an email sender and decide whether to send a complaint report based on this information.
