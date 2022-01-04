@@ -56,10 +56,7 @@ This feedback loop is used to give operators of, e.g. broadcast marketing lists,
 These complaints are based on manual user interaction, e.g.  IMAP movement to "junk".
 
 As described in {{?RFC6449}} the registration for such a feedback loop needs to be done manually by a human at any mailbox provider who provides a FBL.
-If there are new feedback loops rising up, or the email sender wants to add a new IP address or DKIM domain this whole 
-process can be quite time-consuming, a manual process which in turn makes it not well suited and/or feasible for smaller mailbox providers.
-
-This can be quite time-consuming if there are new feedback loops rising up, or the email sender wants to add new IP address or DKIM domain.
+This can be quite time-consuming if there are new feedback loops rising up, or the email sender wants to add new IP addresses or DKIM domains.
 In addition, a manual process is not well suited and/or feasible for smaller mailbox providers.
 
 Because of the manual process involved, the email sender has to go through all providers again, delete his existing subscriptions and register with their new complaint address.
@@ -112,7 +109,7 @@ However, this header requires the List-Unsubscribe header, whose purpose is to p
 For this reason, this header is only used by operators of broadcast marketing lists or mailing lists, not in normal email traffic.
 
 The main interest of this document now is to provide an automated way to signal mailbox providers an address for a complaint feedback loop.
-It is the obligation of the mail sender to decide for themself what action to take after receiving a notification; this is not the subject of this document.
+It is the obligation of the mail sender to decide for themselves what action to take after receiving a notification; this is not the subject of this document.
 
 # Definitions
 The keywords "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT", "SHOULD", "SHOULD NOT", "RECOMMENDED", "NOT RECOMMENDED", "MAY", and "OPTIONAL" in this 
@@ -198,7 +195,7 @@ As part of this experiment, it is recommended to determine what plausibility and
 An email sender who wishes to receive complaints about their emails MUST include a CFBL-Address header in their messages.
 
 The receiving complaint FBL address specified in the messages MUST accept {{!ARF=RFC5965}} compatible reports by default.
-The email sender can OPTIONAL request a {{XARF}}-compatible report if it can only process such, as described in [](#xarf-report).
+The email sender can OPTIONALLY request a {{XARF}} compatible report if they want one, as described in [](#xarf-report).
 The MBP MAY send a {{XARF}} compatible report if it is technically possible for them to do so, otherwise a {{!ARF=RFC5965}} compatible report will be sent.
 
 It is strongly RECOMMENDED that these reports be processed automatically. Each sender must decide for themselves what action to take after receiving a report.
@@ -346,7 +343,7 @@ Specification document: this document
 ~~~
 
 # Examples
-For simplicity the DKIM header has been shortened, and some tags has been omitted.
+For simplicity the DKIM header has been shortened, and some tags have been omitted.
 
 ## Simple
 Email about the report will be generated:
@@ -357,6 +354,7 @@ From: Awesome Newsletter <newsletter@example.com>
 To: me@example.net
 Subject: Super awesome deals for you
 CFBL-Address: fbl@example.com; report=arf
+CFBL-Feedback-ID: 111:222:333:4444
 Message-ID: <a37e51bf-3050-2aab-1234-543a0828d14a@mailer.example.com>
 Content-Type: text/plain; charset=utf-8
 DKIM-Signature: v=1; a=rsa-sha256; d=example.com;
@@ -390,6 +388,7 @@ From: Awesome Newsletter <newsletter@example.com>
 To: me@example.net
 Subject: Super awesome deals for you
 CFBL-Address: fbl@example.com; report=arf
+CFBL-Feedback-ID: 111:222:333:4444
 Message-ID: <a37e51bf-3050-2aab-1234-543a0828d14a@mailer.example.com>
 Content-Type: text/plain; charset=utf-8
 DKIM-Signature: v=1; a=rsa-sha256; d=example.com;
@@ -409,8 +408,8 @@ From: Awesome Newsletter <newsletter@example.com>
 To: me@example.net
 Subject: Super awesome deals for you
 CFBL-Address: fbl@example.com; report=arf
-Message-ID: <a37e51bf-3050-2aab-1234-543a0828d14a@mailer.example.com>
 CFBL-Feedback-ID: 111:222:333:4444
+Message-ID: <a37e51bf-3050-2aab-1234-543a0828d14a@mailer.example.com>
 Content-Type: text/plain; charset=utf-8
 DKIM-Signature: v=1; a=rsa-sha256; d=example.com;
        h=Content-Type:Subject:From:To:Message-ID:
@@ -451,9 +450,9 @@ From: Awesome Newsletter <newsletter@example.com>
 To: me@example.net
 Subject: Super awesome deals for you
 CFBL-Address: fbl@example.com; report=arf
-Message-ID: <a37e51bf-3050-2aab-1234-543a0828d14a@mailer.example.com>
 CFBL-Feedback-ID: 3789e1ae1938aa2f0dfdfa48b20d8f8bc6c21ac34fc5023d
        63f9e64a43dfedc0
+Message-ID: <a37e51bf-3050-2aab-1234-543a0828d14a@mailer.example.com>
 Content-Type: text/plain; charset=utf-8
 DKIM-Signature: v=1; a=rsa-sha256; d=example.com;
        h=Content-Type:Subject:From:To:Message-ID:
