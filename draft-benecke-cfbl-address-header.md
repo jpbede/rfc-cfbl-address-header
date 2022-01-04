@@ -297,7 +297,7 @@ This document already addresses some parts of this problem and describes a priva
 As described in [](#complaint-report), the MBP can omit the entire body and/or header and send only the required fields.
 Nevertheless, each MBP must consider for itself whether this implementation is acceptable and complies with existing privacy laws.
 
-As described in [](#complaint-report), it is also strongly RECOMMENDED that the message ID and, if used, the CFBL feedback ID.
+As described in [](#complaint-report), it is also strongly RECOMMENDED that the Message-ID and, if used, the CFBL-Feedback-ID.
 contain a component that is difficult to forge, such as a {{?HMAC=RFC2104}} that uses a secret key, rather than a plaintext string.
 See [](#hmac-example) for an example.
 
