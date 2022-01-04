@@ -40,7 +40,7 @@ informative:
 This document describes a method that allows an email sender to specify a complaint feedback loop (FBL) address as an email header.
 Also it defines the rules for processing and forwarding such a complaint.
 The motivation for this arises out of the absence of a standardized and automated way to provide mailbox providers with an address for a complaint feedback loop.
-Currently, providing and maintaining such an address is a manual and time-consuming process for mail senders and providers.
+Currently, providing and maintaining such an address is a manual and time-consuming process for email senders and providers.
 
 It is unclear, at the time of publication, whether the function provided by this document has widespread demand, and whether the
 mechanism offered will be adopted and found to be useful. Therefore, this is being published as an Experiment, looking for a constituency
@@ -109,7 +109,7 @@ However, this header requires the List-Unsubscribe header, whose purpose is to p
 For this reason, this header is only used by operators of broadcast marketing lists or mailing lists, not in normal email traffic.
 
 The main interest of this document now is to provide an automated way to signal mailbox providers an address for a complaint feedback loop.
-It is the obligation of the mail sender to decide for themselves what action to take after receiving a notification; this is not the subject of this document.
+It is the obligation of the email sender to decide for themselves what action to take after receiving a notification; this is not the subject of this document.
 
 # Definitions
 The keywords "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT", "SHOULD", "SHOULD NOT", "RECOMMENDED", "NOT RECOMMENDED", "MAY", and "OPTIONAL" in this 
