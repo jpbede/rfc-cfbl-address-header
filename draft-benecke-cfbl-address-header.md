@@ -265,9 +265,9 @@ Like any other email address, a complaint FBL address can be an attack vector fo
 For example, complaint FBL addresses can be flooded with spam.
 This is an existing problem with any existing email address and is not created by this document.
 
-The e-mail sender must take appropriate measures.
+The email sender must take appropriate measures.
 One possible countermeasure would be a rate limit for the delivering IP.
-However, this should be done with caution; normal FBL e-mail traffic must not be affected.
+However, this should be done with caution; normal FBL email traffic must not be affected.
 
 ## Automatic suspension of an account
 Sending an FBL report against a mailbox can cause the account holder to be unreachable if an automatic account suspension occurs too quickly.
