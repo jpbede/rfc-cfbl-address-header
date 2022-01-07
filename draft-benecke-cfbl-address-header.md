@@ -53,7 +53,7 @@ and was not subject to the IETF's approval process.
 For a long time there has been a way for a mailbox provider to forward manual complaints back to the email sender.
 The mailbox provider provides what is called a feedback loop {{?RFC6449}}. 
 This feedback loop is used to give operators of, e.g. broadcast marketing lists, feedback on resulting complaints from their marketing mailings.
-These complaints are based on manual user interaction, e.g.  IMAP movement to "junk".
+These complaints are based on manual user interaction, e.g. IMAP movement to "junk" or by clicking on a "This is spam" button.
 
 As described in {{?RFC6449}} the registration for such a feedback loop needs to be done manually by a human at any mailbox provider who provides a FBL.
 This can be quite time-consuming if there are new feedback loops rising up, or the email sender wants to add new IP addresses or DKIM domains.
@@ -68,13 +68,18 @@ Mail senders can add this header, willing mailbox providers can use it to forwar
 The email sender only needs to add an email header and does not need to manually register with each feedback loop provider.
 The elimination of a manual registration and verification process would be another advantage for the mailbox providers.
 
-A new email header has been prefixed to a new DNS record to easily distinguish between
+A new email header has been chosen in favour of a new DNS record to easily distinguish between
 multiple broadcast marketing list operators / email senders without requiring user or administrator intervention.
 For example, if a company uses multiple mailing systems, each system can set this header itself without requiring any change by the users or administrators.
 No additional DNS query is required on the mailbox provider side to obtain the complaint address.
 
 This document has been prepared in compliance with the GDPR and other data protection laws to address the resulting issues
 when providing an automated address for a complaint feedback loop, as the email may contain personal data.
+
+Nevertheless, the described mechanism bellow potentially permits a kind of man-in-the-middle attack between the domain owner and the recipient.
+A bad actor can generate forged reports to be "from" a domain name the bad actor is attacking and send this reports to the complaint FBL address.
+These fake messages can result in a number of actions, such as blocking of accounts or deactivating recipient addresses.
+This potential harm and others are described with potential countermeasures in [](#security-considerations).
 
 In summary, this document has the following objectives:
 
@@ -257,7 +262,7 @@ cfbl-feedback-id = "CFBL-Feedback-ID:" 0*1WSP fid CRLF
 fid = 1*(atext / ":")
 ~~~
 
-# Security Considerations
+# Security Considerations {#security-considerations}
 This section discusses possible security issues, and their possible solutions, of a complaint FBL address header.
 
 ## Attacks on the FBL address
