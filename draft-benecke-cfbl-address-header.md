@@ -117,7 +117,7 @@ The main interest of this document now is to provide an automated way to signal 
 It is the obligation of the email sender to decide for themselves what action to take after receiving a notification; this is not the subject of this document.
 
 # Definitions
-The keywords "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT", "SHOULD", "SHOULD NOT", "RECOMMENDED", "NOT RECOMMENDED", "MAY", and "OPTIONAL" in this 
+The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT", "SHOULD", "SHOULD NOT", "RECOMMENDED", "NOT RECOMMENDED", "MAY", and "OPTIONAL" in this 
 document are to be interpreted as described in BCP 14 {{!RFC2119}} {{!RFC8174}} when, and only when, they appear in all capitals, as shown here.
 
 The keyword "CFBL" in this document is the abbreviation for "complaint feedback loop" and will hereafter be used.
@@ -383,7 +383,7 @@ Version: 0.1
 Original-Mail-From: sender@mailer.example.com
 Arrival-Date: Tue, 23 Jun 2020 06:31:38 GMT
 Reported-Domain: example.com
-Source-Ip: 192.0.2.1
+Source-IP: 192.0.2.1
 
 ------=_Part_240060962_1083385345.1592993161900
 Content-Type: text/rfc822; charset=UTF-8
@@ -437,7 +437,7 @@ Version: 0.1
 Original-Mail-From: sender@mailer.example.com
 Arrival-Date: Tue, 23 Jun 2020 06:31:38 GMT
 Reported-Domain: example.com
-Source-Ip: 2001:db8:deaf:beef::25
+Source-IP: 2001:DB8::25
 
 ------=_Part_240060962_1083385345.1592993161900
 Content-Type: text/rfc822-headers; charset=UTF-8
@@ -480,7 +480,7 @@ Version: 0.1
 Original-Mail-From: sender@mailer.example.com
 Arrival-Date: Tue, 23 Jun 2020 06:31:38 GMT
 Reported-Domain: example.com
-Source-Ip: 192.0.2.1
+Source-IP: 2001:DB8::25
 
 ------=_Part_240060962_1083385345.1592993161900
 Content-Type: text/rfc822-headers; charset=UTF-8
