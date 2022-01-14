@@ -70,7 +70,7 @@ The elimination of a manual registration and verification process would be anoth
 
 A new email header has been chosen in favour of a new DNS record to easily distinguish between
 multiple broadcast marketing list operators / email senders without requiring user or administrator intervention.
-For example, if a company uses multiple mailing systems, each system can set this header itself without requiring any change by the users or administrators.
+For example, if a company uses multiple mailing systems, each system can set this header itself without requiring any change by the users or administrators within their DNS.
 No additional DNS query is required on the mailbox provider side to obtain the complaint address.
 
 This document has been prepared in compliance with the GDPR and other data protection laws to address the resulting issues
@@ -132,7 +132,7 @@ The keyword "mail sender" in this document is used to describe the party who sen
 This section describes the requirements that a received email, i.e. the email that is sent from the email sender to the MBP and about which a report is to be sent later, must meet.
 
 ### Simple
-If the domain in the From: header {{!MAIL=RFC5322}} and the domain in the CFBL address header are identical, this domain MUST be covered by a valid {{!DKIM=RFC6376}} signature.
+If the domain in the From: header {{!MAIL=RFC5322}} and the domain in the CFBL-Address header are identical, this domain MUST be covered by a valid {{!DKIM=RFC6376}} signature.
 This signature MUST meet the requirements described in [](#received-email-dkim-signature).
 
 The following example meets this case:
