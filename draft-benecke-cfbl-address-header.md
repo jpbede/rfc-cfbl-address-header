@@ -102,7 +102,7 @@ The goal of this experiment is to answer the following questions based on real-w
 - What additional security measures/checks need to be performed at the mailbox provider before a complaint report is sent?
 - What additional security measures/checks need to be performed at the email sender after a complaint report is received?
 
-This experiment is considered successful if the CFBL-Address header has been implemented by multiple independent parties (mail sender and mailbox provider)
+This experiment is considered successful if the CFBL-Address header has been implemented by multiple independent parties (email sender and mailbox provider)
 and these parties successfully use the address specified in the header to exchange feedback loop reports.
 
 If this experiment is successful and these headers prove to be valuable and popular, it may be taken to the IETF for
@@ -326,7 +326,7 @@ Header field name: CFBL-Address
   
 Applicable protocol: mail
 
-Status: experimental
+Status: provisional
 
 Author/Change controller: Jan-Philipp Benecke <jpb@cleverreach.com>
 
@@ -341,7 +341,7 @@ Header field name: CFBL-Feedback-ID
 
 Applicable protocol: mail
 
-Status: experimental
+Status: provisional
 
 Author/Change controller: Jan-Philipp Benecke <jpb@cleverreach.com>
 
