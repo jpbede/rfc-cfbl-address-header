@@ -1,7 +1,7 @@
 ---
 title: "Complaint Feedback Loop Address Header"
 abbrev: "CFBL Address Header"
-docname: draft-benecke-cfbl-address-header-05
+docname: draft-benecke-cfbl-address-header-06
 category: exp
 
 ipr: trust200902
@@ -145,9 +145,8 @@ Subject: Super awesome deals for you
 CFBL-Address: fbl@example.com; report=arf
 Message-ID: <a37e51bf-3050-2aab-1234-543a0828d14a@mailer.example.com>
 Content-Type: text/plain; charset=utf-8
-DKIM-Signature: v=1; a=rsa-sha256; d=example.com;
-       h=Content-Type:Subject:From:To:Message-ID:
-       CFBL-Feedback-ID:CFBL-Address;
+DKIM-Signature: v=1; a=rsa-sha256; d=example.com; s=news;
+       h=Subject:From:To:Message-ID:CFBL-Feedback-ID:CFBL-Address;
 
 This is a super awesome newsletter.
 ~~~
@@ -170,12 +169,10 @@ Subject: Super awesome deals for you
 CFBL-Address: fbl@super-saas-mailer.com; report=arf
 Message-ID: <a37e51bf-3050-2aab-1234-543a0828d14a@mailer.example.com>
 Content-Type: text/plain; charset=utf-8
-DKIM-Signature: v=1; a=rsa-sha256; d=example.com;
-       h=Content-Type:Subject:From:To:Message-ID:
-       CFBL-Feedback-ID:CFBL-Address;
-DKIM-Signature: v=1; a=rsa-sha256; d=super-saas-mailer.com;
-       h=Content-Type:Subject:From:To:Message-ID:
-       CFBL-Feedback-ID:CFBL-Address;
+DKIM-Signature: v=1; a=rsa-sha256; d=example.com; s=news;
+       h=Subject:From:To:Message-ID:CFBL-Feedback-ID:CFBL-Address;
+DKIM-Signature: v=1; a=rsa-sha256; d=super-saas-mailer.com; s=system;
+       h=Subject:From:To:Message-ID:CFBL-Feedback-ID:CFBL-Address;
 
 This is a super awesome newsletter.
 ~~~
@@ -363,9 +360,8 @@ CFBL-Address: fbl@example.com; report=arf
 CFBL-Feedback-ID: 111:222:333:4444
 Message-ID: <a37e51bf-3050-2aab-1234-543a0828d14a@mailer.example.com>
 Content-Type: text/plain; charset=utf-8
-DKIM-Signature: v=1; a=rsa-sha256; d=example.com;
-       h=Content-Type:Subject:From:To:Message-ID:
-       CFBL-Feedback-ID:CFBL-Address;
+DKIM-Signature: v=1; a=rsa-sha256; d=example.com; s=news;
+       h=Subject:From:To:Message-ID:CFBL-Feedback-ID:CFBL-Address;
 
 This is a super awesome newsletter.
 ~~~
@@ -397,9 +393,8 @@ CFBL-Address: fbl@example.com; report=arf
 CFBL-Feedback-ID: 111:222:333:4444
 Message-ID: <a37e51bf-3050-2aab-1234-543a0828d14a@mailer.example.com>
 Content-Type: text/plain; charset=utf-8
-DKIM-Signature: v=1; a=rsa-sha256; d=example.com;
-       h=Content-Type:Subject:From:To:Message-ID:
-       CFBL-Feedback-ID:CFBL-Address;
+DKIM-Signature: v=1; a=rsa-sha256; d=example.com; s=news;
+       h=Subject:From:To:Message-ID:CFBL-Feedback-ID:CFBL-Address;
 
 This is a super awesome newsletter.
 ------=_Part_240060962_1083385345.1592993161900--
@@ -417,9 +412,8 @@ CFBL-Address: fbl@example.com; report=arf
 CFBL-Feedback-ID: 111:222:333:4444
 Message-ID: <a37e51bf-3050-2aab-1234-543a0828d14a@mailer.example.com>
 Content-Type: text/plain; charset=utf-8
-DKIM-Signature: v=1; a=rsa-sha256; d=example.com;
-       h=Content-Type:Subject:From:To:Message-ID:
-       CFBL-Feedback-ID:CFBL-Address;
+DKIM-Signature: v=1; a=rsa-sha256; d=example.com; s=news;
+       h=Subject:From:To:Message-ID:CFBL-Feedback-ID:CFBL-Address;
 
 This is a super awesome newsletter.
 ~~~
@@ -460,9 +454,8 @@ CFBL-Feedback-ID: 3789e1ae1938aa2f0dfdfa48b20d8f8bc6c21ac34fc5023d
        63f9e64a43dfedc0
 Message-ID: <a37e51bf-3050-2aab-1234-543a0828d14a@mailer.example.com>
 Content-Type: text/plain; charset=utf-8
-DKIM-Signature: v=1; a=rsa-sha256; d=example.com;
-       h=Content-Type:Subject:From:To:Message-ID:
-       CFBL-Feedback-ID:CFBL-Address;
+DKIM-Signature: v=1; a=rsa-sha256; d=example.com; s=news;
+       h=Subject:From:To:Message-ID:CFBL-Feedback-ID:CFBL-Address;
 
 This is a super awesome newsletter.
 ~~~
