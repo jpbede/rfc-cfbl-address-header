@@ -51,18 +51,18 @@ and was not subject to the IETF's approval process.
 
 # Introduction and Motivation
 For a long time there has been a way for a mailbox provider to forward manual complaints back to the email sender.
-The mailbox provider provides what is called a feedback loop {{?RFC6449}}. 
+The mailbox provider provides what is called a feedback loop {{!RFC6449}}. 
 This feedback loop is used to give operators of, e.g. broadcast marketing lists, feedback on resulting complaints from their marketing mailings.
 These complaints are based on manual user interaction, e.g. IMAP movement to "junk" or by clicking on a "This is spam" button.
 
-As described in {{?RFC6449}} the registration for such a feedback loop needs to be done manually by a human at any mailbox provider who provides a FBL.
+As described in {{!RFC6449}} the registration for such a feedback loop needs to be done manually by a human at any mailbox provider who provides a FBL.
 This can be quite time-consuming if there are new feedback loops rising up, or the email sender wants to add new IP addresses or DKIM domains.
 In addition, a manual process is not well suited and/or feasible for smaller mailbox providers.
 
 Because of the manual process involved, the email sender has to go through all providers again, delete his existing subscriptions and register with their new complaint address.
 
 This document addresses this issue with a new email header.
-It extends the recommendations for the complaint feedback loop described in {{?RFC6449}} with an automated way to submit the necessary information to mailbox providers.
+It extends the recommendations for the complaint feedback loop described in {{!RFC6449}} with an automated way to submit the necessary information to mailbox providers.
 
 Mail senders can add this header, willing mailbox providers can use it to forward the generated report to the specified complaint address.
 The email sender only needs to add an email header and does not need to manually register with each feedback loop provider.
