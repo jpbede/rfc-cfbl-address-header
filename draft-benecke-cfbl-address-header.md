@@ -207,9 +207,10 @@ The email sender MUST take action to address the described requirements in [Requ
 ## Mailbox provider {#mailbox-provider}
 If the MBP wants to process the complaints and forward it, they MUST query the CFBL-Address header and forward the report to the complaint FBL address.
 
-By default, an {{!ARF=RFC5965}} compatible report MUST be sent when a manual action has been taken e.g., when a receiver marks a mail as spam, 
-by clicking the "This is spam"-button in any web portal or by moving a mail to junk folder, this also includes {{?IMAP=RFC9051}} and {{?POP3=RFC1939}} movements.
-The MBP SHALL NOT send any report when an automatic decisions has been made e.g., spam filtering. 
+By default, an {{!ARF=RFC5965}} compatible report MUST be sent.
+Per {{!RFC6449}} Section 3.2, a complaint report MUST be sent when a manual action has been taken e.g., when a receiver marks a mail as spam, 
+by clicking the "This is spam"-button in any web portal or by moving a mail to junk folder, this also includes {{?IMAP=RFC9051}} and {{?POP3=RFC1939}} movements. 
+The MBP SHALL NOT send any report when an automatic decisions has been made e.g., spam filtering.
 
 The MBP MUST send a {{XARF}} compatible report when the email sender requests it as described in [](#xarf-report).
 If it is not possible for the MBP to send a {{XARF}} compatible report as requested, a {{!ARF=RFC5965}} compatible report MUST be sent.
@@ -221,7 +222,7 @@ The complaint report MAY be a {{XARF}} report if the email sender requests it, a
 
 The report MUST contain at least the Message-ID {{!MAIL=RFC5322}}. If present, the header "CFBL-Feedback-ID" of the complaining email MUST be added additionally.
 
-The MBP MAY omit all further headers and/or body to comply with any data-regulation laws.
+The MBP MAY omit or redact, as described in {{?RFC6590}}, all further headers and/or body to comply with any data-regulation laws.
 
 It is highly RECOMMENDED that, if used, the CFBL-Feedback-ID includes a hard to forge component such as an {{?HMAC=RFC2104}} using a secret
 key, instead of a plain-text string. 
@@ -297,6 +298,7 @@ The resulting ARF report sent by the MBP to the email sender may violate a data 
 
 This document already addresses some parts of this problem and describes a privacy-safe way to send a FBL report.
 As described in [](#complaint-report), the MBP can omit the entire body and/or header and send only the required fields.
+As described in {{?RFC6590}}, the MBP can also redact the data in question.
 Nevertheless, each MBP must consider for itself whether this implementation is acceptable and complies with existing privacy laws.
 
 As described in [](#complaint-report), it is also strongly RECOMMENDED that the Message-ID and, if used, the CFBL-Feedback-ID.
