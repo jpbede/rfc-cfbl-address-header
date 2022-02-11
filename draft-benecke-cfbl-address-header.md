@@ -124,7 +124,7 @@ The keyword "CFBL" in this document is the abbreviation for "complaint feedback 
 
 The keyword "MBP" in this document is the abbreviation for "mailbox provider", it is the party who receives an email, and will be used hereafter.
 
-The keyword "mail sender" in this document is used to describe the party who sends an email, this can be an MBP, a broadcast marketing list operator or any other email sending party. It will be used hereafter.
+The keyword "email sender" in this document is used to describe the party who sends an email, this can be an MBP, a broadcast marketing list operator or any other email sending party. It will be used hereafter.
 
 # Requirements
 

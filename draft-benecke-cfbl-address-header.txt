@@ -4,8 +4,8 @@
 
 Network Working Group                                         J. Benecke
 Internet-Draft                                 CleverReach GmbH & Co. KG
-Intended status: Experimental                            28 January 2022
-Expires: 1 August 2022
+Intended status: Experimental                           11 February 2022
+Expires: 15 August 2022
 
 
                  Complaint Feedback Loop Address Header
@@ -45,7 +45,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 1 August 2022.
+   This Internet-Draft will expire on 15 August 2022.
 
 
 
@@ -53,9 +53,9 @@ Status of This Memo
 
 
 
-Benecke                   Expires 1 August 2022                 [Page 1]
+Benecke                  Expires 15 August 2022                 [Page 1]
 
-Internet-Draft             CFBL Address Header              January 2022
+Internet-Draft             CFBL Address Header             February 2022
 
 
 Copyright Notice
@@ -109,9 +109,9 @@ Table of Contents
 
 
 
-Benecke                   Expires 1 August 2022                 [Page 2]
+Benecke                  Expires 15 August 2022                 [Page 2]
 
-Internet-Draft             CFBL Address Header              January 2022
+Internet-Draft             CFBL Address Header             February 2022
 
 
    11. References  . . . . . . . . . . . . . . . . . . . . . . . . .  15
@@ -165,9 +165,9 @@ Internet-Draft             CFBL Address Header              January 2022
 
 
 
-Benecke                   Expires 1 August 2022                 [Page 3]
+Benecke                  Expires 15 August 2022                 [Page 3]
 
-Internet-Draft             CFBL Address Header              January 2022
+Internet-Draft             CFBL Address Header             February 2022
 
 
    This document has been prepared in compliance with the GDPR and other
@@ -221,9 +221,9 @@ Internet-Draft             CFBL Address Header              January 2022
 
 
 
-Benecke                   Expires 1 August 2022                 [Page 4]
+Benecke                  Expires 15 August 2022                 [Page 4]
 
-Internet-Draft             CFBL Address Header              January 2022
+Internet-Draft             CFBL Address Header             February 2022
 
 
    *  Does the presence of the CFBL-Address/CFBL-Feedback-ID field
@@ -277,12 +277,12 @@ Internet-Draft             CFBL Address Header              January 2022
 
 
 
-Benecke                   Expires 1 August 2022                 [Page 5]
+Benecke                  Expires 15 August 2022                 [Page 5]
 
-Internet-Draft             CFBL Address Header              January 2022
+Internet-Draft             CFBL Address Header             February 2022
 
 
-   The keyword "mail sender" in this document is used to describe the
+   The keyword "email sender" in this document is used to describe the
    party who sends an email, this can be an MBP, a broadcast marketing
    list operator or any other email sending party.  It will be used
    hereafter.
@@ -333,9 +333,9 @@ Internet-Draft             CFBL Address Header              January 2022
 
 
 
-Benecke                   Expires 1 August 2022                 [Page 6]
+Benecke                  Expires 15 August 2022                 [Page 6]
 
-Internet-Draft             CFBL Address Header              January 2022
+Internet-Draft             CFBL Address Header             February 2022
 
 
    Return-Path: <sender@super-saas-mailer.com>
@@ -389,9 +389,9 @@ Internet-Draft             CFBL Address Header              January 2022
 
 
 
-Benecke                   Expires 1 August 2022                 [Page 7]
+Benecke                  Expires 15 August 2022                 [Page 7]
 
-Internet-Draft             CFBL Address Header              January 2022
+Internet-Draft             CFBL Address Header             February 2022
 
 
    described in Section 5.1.  The MBP MAY send a [XARF] compatible
@@ -445,9 +445,9 @@ Internet-Draft             CFBL Address Header              January 2022
 
 
 
-Benecke                   Expires 1 August 2022                 [Page 8]
+Benecke                  Expires 15 August 2022                 [Page 8]
 
-Internet-Draft             CFBL Address Header              January 2022
+Internet-Draft             CFBL Address Header             February 2022
 
 
    It is highly RECOMMENDED that, if used, the CFBL-Feedback-ID includes
@@ -501,9 +501,9 @@ Internet-Draft             CFBL Address Header              January 2022
 
 
 
-Benecke                   Expires 1 August 2022                 [Page 9]
+Benecke                  Expires 15 August 2022                 [Page 9]
 
-Internet-Draft             CFBL Address Header              January 2022
+Internet-Draft             CFBL Address Header             February 2022
 
 
    The email sender must take appropriate measures.  One possible
@@ -557,9 +557,9 @@ Internet-Draft             CFBL Address Header              January 2022
 
 
 
-Benecke                   Expires 1 August 2022                [Page 10]
+Benecke                  Expires 15 August 2022                [Page 10]
 
-Internet-Draft             CFBL Address Header              January 2022
+Internet-Draft             CFBL Address Header             February 2022
 
 
    This document already addresses some parts of this problem and
@@ -613,9 +613,9 @@ Internet-Draft             CFBL Address Header              January 2022
 
 
 
-Benecke                   Expires 1 August 2022                [Page 11]
+Benecke                  Expires 15 August 2022                [Page 11]
 
-Internet-Draft             CFBL Address Header              January 2022
+Internet-Draft             CFBL Address Header             February 2022
 
 
    Header field name: CFBL-Address
@@ -669,9 +669,9 @@ Internet-Draft             CFBL Address Header              January 2022
 
 
 
-Benecke                   Expires 1 August 2022                [Page 12]
+Benecke                  Expires 15 August 2022                [Page 12]
 
-Internet-Draft             CFBL Address Header              January 2022
+Internet-Draft             CFBL Address Header             February 2022
 
 
    ------=_Part_240060962_1083385345.1592993161900
@@ -725,9 +725,9 @@ Internet-Draft             CFBL Address Header              January 2022
 
 
 
-Benecke                   Expires 1 August 2022                [Page 13]
+Benecke                  Expires 15 August 2022                [Page 13]
 
-Internet-Draft             CFBL Address Header              January 2022
+Internet-Draft             CFBL Address Header             February 2022
 
 
    ------=_Part_240060962_1083385345.1592993161900
@@ -781,9 +781,9 @@ Internet-Draft             CFBL Address Header              January 2022
 
 
 
-Benecke                   Expires 1 August 2022                [Page 14]
+Benecke                  Expires 15 August 2022                [Page 14]
 
-Internet-Draft             CFBL Address Header              January 2022
+Internet-Draft             CFBL Address Header             February 2022
 
 
    ------=_Part_240060962_1083385345.1592993161900
@@ -837,9 +837,9 @@ Internet-Draft             CFBL Address Header              January 2022
 
 
 
-Benecke                   Expires 1 August 2022                [Page 15]
+Benecke                  Expires 15 August 2022                [Page 15]
 
-Internet-Draft             CFBL Address Header              January 2022
+Internet-Draft             CFBL Address Header             February 2022
 
 
    [RFC2119]  Bradner, S., "Key words for use in RFCs to Indicate
@@ -893,9 +893,9 @@ Internet-Draft             CFBL Address Header              January 2022
 
 
 
-Benecke                   Expires 1 August 2022                [Page 16]
+Benecke                  Expires 15 August 2022                [Page 16]
 
-Internet-Draft             CFBL Address Header              January 2022
+Internet-Draft             CFBL Address Header             February 2022
 
 
 Author's Address
@@ -949,4 +949,4 @@ Author's Address
 
 
 
-Benecke                   Expires 1 August 2022                [Page 17]
+Benecke                  Expires 15 August 2022                [Page 17]
