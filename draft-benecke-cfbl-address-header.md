@@ -86,7 +86,7 @@ In summary, this document has the following objectives:
 * Allow email senders to signal that a complaint address exists without requiring manual registration with all providers.
 * Allow mailbox providers to obtain a complaint address without developing their own manual registration process.
 * Be able to provide a complaint address to smaller mailbox providers who do not have a feedback loop in place
-* Provide a GDPR compliant option for a complaint feedback loop.
+* Provide a GDPR-compliant option for a complaint feedback loop.
 
 ## Scope of this Experiment
 The CFBL-Address header and the CFBL-Feedback-ID header are an experiment. 
@@ -131,8 +131,9 @@ The keyword "email sender" in this document is used to describe the party who se
 ## Received email {#received-email}
 This section describes the requirements that a received email, i.e. the email that is sent from the email sender to the MBP and about which a report is to be sent later, must meet.
 
-### Simple
-If the domain in the From: header {{!MAIL=RFC5322}} and the domain in the CFBL-Address header are identical, this domain MUST be covered by a valid {{!DKIM=RFC6376}} signature.
+### Strict
+If the domain in the {{!RFC5322}}.From and the domain in the CFBL-Address header are identical, this domain MUST be covered by a valid
+{{!DKIM=RFC6376}} signature. In this case, the DKIM "d=" parameter and the {{!RFC5322}}.From field have identical DNS domains.
 This signature MUST meet the requirements described in [](#received-email-dkim-signature).
 
 The following example meets this case:
@@ -140,7 +141,7 @@ The following example meets this case:
 ~~~
 Return-Path: <sender@mailer.example.com>
 From: Awesome Newsletter <newsletter@example.com>
-To: me@example.net
+To: receiver@example.org
 Subject: Super awesome deals for you
 CFBL-Address: fbl@example.com; report=arf
 Message-ID: <a37e51bf-3050-2aab-1234-543a0828d14a@mailer.example.com>
@@ -151,8 +152,47 @@ DKIM-Signature: v=1; a=rsa-sha256; d=example.com; s=news;
 This is a super awesome newsletter.
 ~~~
 
+### Relaxed
+If the domain in CFBL-Address is a child domain of the {{!RFC5322}}.From, the {{!RFC5322}}.From domain MUST be covered by a valid {{!DKIM=RFC6376}} signature. 
+In this case, the DKIM "d=" parameter and the {{!RFC5322}}.From domain have a identical (Example 1) or parent (Example 2) DNS domains.
+This signature MUST meet the requirements described in [](#received-email-dkim-signature).
+
+Example 1:
+
+~~~
+Return-Path: <sender@mailer.example.com>
+From: Awesome Newsletter <newsletter@example.com>
+To: receiver@example.org
+Subject: Super awesome deals for you
+CFBL-Address: fbl@mailer.example.com; report=arf
+Message-ID: <a37e51bf-3050-2aab-1234-543a0828d14a@mailer.example.com>
+Content-Type: text/plain; charset=utf-8
+DKIM-Signature: v=1; a=rsa-sha256; d=example.com;
+      h=Content-Type:Subject:From:To:Message-ID:
+      CFBL-Feedback-ID:CFBL-Address;
+
+This is a super awesome newsletter.
+~~~
+
+Example 2:
+
+~~~
+Return-Path: <sender@mailer.example.com>
+From: Awesome Newsletter <newsletter@mailer.example.com>
+To: receiver@example.org
+Subject: Super awesome deals for you
+CFBL-Address: fbl@mailer.example.com; report=arf
+Message-ID: <a37e51bf-3050-2aab-1234-543a0828d14a@mailer.example.com>
+Content-Type: text/plain; charset=utf-8
+DKIM-Signature: v=1; a=rsa-sha256; d=example.com;
+      h=Content-Type:Subject:From:To:Message-ID:
+      CFBL-Feedback-ID:CFBL-Address;
+
+This is a super awesome newsletter.
+~~~
+
 ### Complex
-If the domain in From: header {{!MAIL=RFC5322}}, of the email sent by email sender to MBP, differs from the domain in the CFBL-Address header, 
+If the domain in {{!RFC5322}}.From of differs from the domain in the CFBL-Address header,
 the domain of the CFBL-Address header MUST be covered by an additional valid {{!DKIM=RFC6376}} signature.
 Both signatures MUST meet the requirements described in [](#received-email-dkim-signature).
 
@@ -164,10 +204,10 @@ The following example meets this case:
 ~~~
 Return-Path: <sender@super-saas-mailer.com>
 From: Awesome Newsletter <newsletter@example.com>
-To: me@example.net
+To: receiver@example.org
 Subject: Super awesome deals for you
 CFBL-Address: fbl@super-saas-mailer.com; report=arf
-Message-ID: <a37e51bf-3050-2aab-1234-543a0828d14a@mailer.example.com>
+Message-ID: <a37e51bf-3050-2aab-1234-543a0828d14a@example.com>
 Content-Type: text/plain; charset=utf-8
 DKIM-Signature: v=1; a=rsa-sha256; d=example.com; s=news;
        h=Subject:From:To:Message-ID:CFBL-Feedback-ID:CFBL-Address;
@@ -487,7 +527,8 @@ CFBL-Feedback-ID: 3789e1ae1938aa2f0dfdfa48b20d8f8bc6c21ac34fc5023d
 ~~~
 
 # Acknowledgments
-Technical and editorial reviews and comments were provided by the colleagues at CleverReach, the colleagues at Certified Senders Alliance and eco.de,
+Technical and editorial reviews were provided by the colleagues at CleverReach, 
+the colleagues at Certified Senders Alliance and eco.de, Levent Ulucan (Inxmail), 
 Arne Allisat and Tobias Herkula (1&1 Mail & Media) and Sven Krohlas (BFK Edv-consulting).
 
 --- back

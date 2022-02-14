@@ -4,8 +4,8 @@
 
 Network Working Group                                         J. Benecke
 Internet-Draft                                 CleverReach GmbH & Co. KG
-Intended status: Experimental                           11 February 2022
-Expires: 15 August 2022
+Intended status: Experimental                           14 February 2022
+Expires: 18 August 2022
 
 
                  Complaint Feedback Loop Address Header
@@ -45,7 +45,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 15 August 2022.
+   This Internet-Draft will expire on 18 August 2022.
 
 
 
@@ -53,7 +53,7 @@ Status of This Memo
 
 
 
-Benecke                  Expires 15 August 2022                 [Page 1]
+Benecke                  Expires 18 August 2022                 [Page 1]
 
 Internet-Draft             CFBL Address Header             February 2022
 
@@ -80,44 +80,45 @@ Table of Contents
    2.  Definitions . . . . . . . . . . . . . . . . . . . . . . . . .   5
    3.  Requirements  . . . . . . . . . . . . . . . . . . . . . . . .   6
      3.1.  Received email  . . . . . . . . . . . . . . . . . . . . .   6
-       3.1.1.  Simple  . . . . . . . . . . . . . . . . . . . . . . .   6
-       3.1.2.  Complex . . . . . . . . . . . . . . . . . . . . . . .   6
-       3.1.3.  DKIM signature  . . . . . . . . . . . . . . . . . . .   7
-     3.2.  Report email  . . . . . . . . . . . . . . . . . . . . . .   7
-   4.  Implementation  . . . . . . . . . . . . . . . . . . . . . . .   7
-     4.1.  Email senders . . . . . . . . . . . . . . . . . . . . . .   7
-     4.2.  Mailbox provider  . . . . . . . . . . . . . . . . . . . .   8
-   5.  Complaint report  . . . . . . . . . . . . . . . . . . . . . .   8
-     5.1.  XARF compatible report  . . . . . . . . . . . . . . . . .   9
-   6.  Header Syntax . . . . . . . . . . . . . . . . . . . . . . . .   9
-     6.1.  CFBL-Address  . . . . . . . . . . . . . . . . . . . . . .   9
-     6.2.  CFBL-Feedback-ID  . . . . . . . . . . . . . . . . . . . .   9
-   7.  Security Considerations . . . . . . . . . . . . . . . . . . .   9
-     7.1.  Attacks on the FBL address  . . . . . . . . . . . . . . .   9
-     7.2.  Automatic suspension of an account  . . . . . . . . . . .  10
-     7.3.  Enumeration attacks / provoking unsubscription  . . . . .  10
-     7.4.  GDPR and other data-regulation laws . . . . . . . . . . .  10
-     7.5.  Abusing for Validity and Existence Queries  . . . . . . .  11
-   8.  IANA Considerations . . . . . . . . . . . . . . . . . . . . .  11
-     8.1.  CFBL-Address  . . . . . . . . . . . . . . . . . . . . . .  11
-     8.2.  CFBL-Feedback-ID  . . . . . . . . . . . . . . . . . . . .  12
-   9.  Examples  . . . . . . . . . . . . . . . . . . . . . . . . . .  12
-     9.1.  Simple  . . . . . . . . . . . . . . . . . . . . . . . . .  12
-     9.2.  GDPR safe report  . . . . . . . . . . . . . . . . . . . .  13
-     9.3.  GDPR safe report with HMAC  . . . . . . . . . . . . . . .  14
-   10. Acknowledgments . . . . . . . . . . . . . . . . . . . . . . .  15
+       3.1.1.  Strict  . . . . . . . . . . . . . . . . . . . . . . .   6
+       3.1.2.  Relaxed . . . . . . . . . . . . . . . . . . . . . . .   6
+       3.1.3.  Complex . . . . . . . . . . . . . . . . . . . . . . .   7
+       3.1.4.  DKIM signature  . . . . . . . . . . . . . . . . . . .   8
+     3.2.  Report email  . . . . . . . . . . . . . . . . . . . . . .   8
+   4.  Implementation  . . . . . . . . . . . . . . . . . . . . . . .   8
+     4.1.  Email senders . . . . . . . . . . . . . . . . . . . . . .   8
+     4.2.  Mailbox provider  . . . . . . . . . . . . . . . . . . . .   9
+   5.  Complaint report  . . . . . . . . . . . . . . . . . . . . . .   9
+     5.1.  XARF compatible report  . . . . . . . . . . . . . . . . .  10
+   6.  Header Syntax . . . . . . . . . . . . . . . . . . . . . . . .  10
+     6.1.  CFBL-Address  . . . . . . . . . . . . . . . . . . . . . .  10
+     6.2.  CFBL-Feedback-ID  . . . . . . . . . . . . . . . . . . . .  10
+   7.  Security Considerations . . . . . . . . . . . . . . . . . . .  10
+     7.1.  Attacks on the FBL address  . . . . . . . . . . . . . . .  10
+     7.2.  Automatic suspension of an account  . . . . . . . . . . .  11
+     7.3.  Enumeration attacks / provoking unsubscription  . . . . .  11
+     7.4.  GDPR and other data-regulation laws . . . . . . . . . . .  11
+     7.5.  Abusing for Validity and Existence Queries  . . . . . . .  12
+   8.  IANA Considerations . . . . . . . . . . . . . . . . . . . . .  12
+     8.1.  CFBL-Address  . . . . . . . . . . . . . . . . . . . . . .  12
+     8.2.  CFBL-Feedback-ID  . . . . . . . . . . . . . . . . . . . .  13
+   9.  Examples  . . . . . . . . . . . . . . . . . . . . . . . . . .  13
+     9.1.  Simple  . . . . . . . . . . . . . . . . . . . . . . . . .  13
+     9.2.  GDPR safe report  . . . . . . . . . . . . . . . . . . . .  14
+     9.3.  GDPR safe report with HMAC  . . . . . . . . . . . . . . .  15
 
 
 
-Benecke                  Expires 15 August 2022                 [Page 2]
+Benecke                  Expires 18 August 2022                 [Page 2]
 
 Internet-Draft             CFBL Address Header             February 2022
 
 
-   11. References  . . . . . . . . . . . . . . . . . . . . . . . . .  15
-     11.1.  Normative References . . . . . . . . . . . . . . . . . .  15
-     11.2.  Informative References . . . . . . . . . . . . . . . . .  16
-   Author's Address  . . . . . . . . . . . . . . . . . . . . . . . .  17
+   10. Acknowledgments . . . . . . . . . . . . . . . . . . . . . . .  16
+   11. References  . . . . . . . . . . . . . . . . . . . . . . . . .  16
+     11.1.  Normative References . . . . . . . . . . . . . . . . . .  16
+     11.2.  Informative References . . . . . . . . . . . . . . . . .  17
+   Author's Address  . . . . . . . . . . . . . . . . . . . . . . . .  18
 
 1.  Introduction and Motivation
 
@@ -164,8 +165,7 @@ Internet-Draft             CFBL Address Header             February 2022
 
 
 
-
-Benecke                  Expires 15 August 2022                 [Page 3]
+Benecke                  Expires 18 August 2022                 [Page 3]
 
 Internet-Draft             CFBL Address Header             February 2022
 
@@ -195,7 +195,7 @@ Internet-Draft             CFBL Address Header             February 2022
    *  Be able to provide a complaint address to smaller mailbox
       providers who do not have a feedback loop in place
 
-   *  Provide a GDPR compliant option for a complaint feedback loop.
+   *  Provide a GDPR-compliant option for a complaint feedback loop.
 
 1.1.  Scope of this Experiment
 
@@ -221,7 +221,7 @@ Internet-Draft             CFBL Address Header             February 2022
 
 
 
-Benecke                  Expires 15 August 2022                 [Page 4]
+Benecke                  Expires 18 August 2022                 [Page 4]
 
 Internet-Draft             CFBL Address Header             February 2022
 
@@ -277,7 +277,7 @@ Internet-Draft             CFBL Address Header             February 2022
 
 
 
-Benecke                  Expires 15 August 2022                 [Page 5]
+Benecke                  Expires 18 August 2022                 [Page 5]
 
 Internet-Draft             CFBL Address Header             February 2022
 
@@ -295,18 +295,19 @@ Internet-Draft             CFBL Address Header             February 2022
    the email that is sent from the email sender to the MBP and about
    which a report is to be sent later, must meet.
 
-3.1.1.  Simple
+3.1.1.  Strict
 
-   If the domain in the From: header [MAIL] and the domain in the CFBL-
+   If the domain in the [RFC5322].From and the domain in the CFBL-
    Address header are identical, this domain MUST be covered by a valid
-   [DKIM] signature.  This signature MUST meet the requirements
-   described in Section 3.1.3.
+   [DKIM] signature.  In this case, the DKIM "d=" parameter and the
+   [RFC5322].From field have identical DNS domains.  This signature MUST
+   meet the requirements described in Section 3.1.4.
 
    The following example meets this case:
 
    Return-Path: <sender@mailer.example.com>
    From: Awesome Newsletter <newsletter@example.com>
-   To: me@example.net
+   To: receiver@example.org
    Subject: Super awesome deals for you
    CFBL-Address: fbl@example.com; report=arf
    Message-ID: <a37e51bf-3050-2aab-1234-543a0828d14a@mailer.example.com>
@@ -316,13 +317,61 @@ Internet-Draft             CFBL Address Header             February 2022
 
    This is a super awesome newsletter.
 
-3.1.2.  Complex
+3.1.2.  Relaxed
 
-   If the domain in From: header [MAIL], of the email sent by email
-   sender to MBP, differs from the domain in the CFBL-Address header,
-   the domain of the CFBL-Address header MUST be covered by an
-   additional valid [DKIM] signature.  Both signatures MUST meet the
-   requirements described in Section 3.1.3.
+   If the domain in CFBL-Address is a child domain of the
+   [RFC5322].From, the [RFC5322].From domain MUST be covered by a valid
+   [DKIM] signature.  In this case, the DKIM "d=" parameter and the
+   [RFC5322].From domain have a identical (Example 1) or parent (Example
+   2) DNS domains.  This signature MUST meet the requirements described
+   in Section 3.1.4.
+
+   Example 1:
+
+
+
+
+
+
+Benecke                  Expires 18 August 2022                 [Page 6]
+
+Internet-Draft             CFBL Address Header             February 2022
+
+
+   Return-Path: <sender@mailer.example.com>
+   From: Awesome Newsletter <newsletter@example.com>
+   To: receiver@example.org
+   Subject: Super awesome deals for you
+   CFBL-Address: fbl@mailer.example.com; report=arf
+   Message-ID: <a37e51bf-3050-2aab-1234-543a0828d14a@mailer.example.com>
+   Content-Type: text/plain; charset=utf-8
+   DKIM-Signature: v=1; a=rsa-sha256; d=example.com;
+         h=Content-Type:Subject:From:To:Message-ID:
+         CFBL-Feedback-ID:CFBL-Address;
+
+   This is a super awesome newsletter.
+
+   Example 2:
+
+   Return-Path: <sender@mailer.example.com>
+   From: Awesome Newsletter <newsletter@mailer.example.com>
+   To: receiver@example.org
+   Subject: Super awesome deals for you
+   CFBL-Address: fbl@mailer.example.com; report=arf
+   Message-ID: <a37e51bf-3050-2aab-1234-543a0828d14a@mailer.example.com>
+   Content-Type: text/plain; charset=utf-8
+   DKIM-Signature: v=1; a=rsa-sha256; d=example.com;
+         h=Content-Type:Subject:From:To:Message-ID:
+         CFBL-Feedback-ID:CFBL-Address;
+
+   This is a super awesome newsletter.
+
+3.1.3.  Complex
+
+   If the domain in [RFC5322].From of differs from the domain in the
+   CFBL-Address header, the domain of the CFBL-Address header MUST be
+   covered by an additional valid [DKIM] signature.  Both signatures
+   MUST meet the requirements described in Section 3.1.4.
 
    This double DKIM signature ensures that both the domain owner of the
    From: domain and the domain owner of the CFBL-Address: domain agree
@@ -333,17 +382,24 @@ Internet-Draft             CFBL Address Header             February 2022
 
 
 
-Benecke                  Expires 15 August 2022                 [Page 6]
+
+
+
+
+
+
+
+Benecke                  Expires 18 August 2022                 [Page 7]
 
 Internet-Draft             CFBL Address Header             February 2022
 
 
    Return-Path: <sender@super-saas-mailer.com>
    From: Awesome Newsletter <newsletter@example.com>
-   To: me@example.net
+   To: receiver@example.org
    Subject: Super awesome deals for you
    CFBL-Address: fbl@super-saas-mailer.com; report=arf
-   Message-ID: <a37e51bf-3050-2aab-1234-543a0828d14a@mailer.example.com>
+   Message-ID: <a37e51bf-3050-2aab-1234-543a0828d14a@example.com>
    Content-Type: text/plain; charset=utf-8
    DKIM-Signature: v=1; a=rsa-sha256; d=example.com; s=news;
           h=Subject:From:To:Message-ID:CFBL-Feedback-ID:CFBL-Address;
@@ -352,7 +408,7 @@ Internet-Draft             CFBL Address Header             February 2022
 
    This is a super awesome newsletter.
 
-3.1.3.  DKIM signature
+3.1.4.  DKIM signature
 
    The CFBL-Address header MUST be included in the "h=" tag of the
    aforementioned valid DKIM-Signature.  When the CFBL-Feedback-ID
@@ -389,7 +445,7 @@ Internet-Draft             CFBL Address Header             February 2022
 
 
 
-Benecke                  Expires 15 August 2022                 [Page 7]
+Benecke                  Expires 18 August 2022                 [Page 8]
 
 Internet-Draft             CFBL Address Header             February 2022
 
@@ -445,7 +501,7 @@ Internet-Draft             CFBL Address Header             February 2022
 
 
 
-Benecke                  Expires 15 August 2022                 [Page 8]
+Benecke                  Expires 18 August 2022                 [Page 9]
 
 Internet-Draft             CFBL Address Header             February 2022
 
@@ -501,7 +557,7 @@ Internet-Draft             CFBL Address Header             February 2022
 
 
 
-Benecke                  Expires 15 August 2022                 [Page 9]
+Benecke                  Expires 18 August 2022                [Page 10]
 
 Internet-Draft             CFBL Address Header             February 2022
 
@@ -557,7 +613,7 @@ Internet-Draft             CFBL Address Header             February 2022
 
 
 
-Benecke                  Expires 15 August 2022                [Page 10]
+Benecke                  Expires 18 August 2022                [Page 11]
 
 Internet-Draft             CFBL Address Header             February 2022
 
@@ -613,7 +669,7 @@ Internet-Draft             CFBL Address Header             February 2022
 
 
 
-Benecke                  Expires 15 August 2022                [Page 11]
+Benecke                  Expires 18 August 2022                [Page 12]
 
 Internet-Draft             CFBL Address Header             February 2022
 
@@ -669,7 +725,7 @@ Internet-Draft             CFBL Address Header             February 2022
 
 
 
-Benecke                  Expires 15 August 2022                [Page 12]
+Benecke                  Expires 18 August 2022                [Page 13]
 
 Internet-Draft             CFBL Address Header             February 2022
 
@@ -725,7 +781,7 @@ Internet-Draft             CFBL Address Header             February 2022
 
 
 
-Benecke                  Expires 15 August 2022                [Page 13]
+Benecke                  Expires 18 August 2022                [Page 14]
 
 Internet-Draft             CFBL Address Header             February 2022
 
@@ -781,7 +837,7 @@ Internet-Draft             CFBL Address Header             February 2022
 
 
 
-Benecke                  Expires 15 August 2022                [Page 14]
+Benecke                  Expires 18 August 2022                [Page 15]
 
 Internet-Draft             CFBL Address Header             February 2022
 
@@ -808,9 +864,9 @@ Internet-Draft             CFBL Address Header             February 2022
 
 10.  Acknowledgments
 
-   Technical and editorial reviews and comments were provided by the
-   colleagues at CleverReach, the colleagues at Certified Senders
-   Alliance and eco.de, Arne Allisat and Tobias Herkula (1&1 Mail &
+   Technical and editorial reviews were provided by the colleagues at
+   CleverReach, the colleagues at Certified Senders Alliance and eco.de,
+   Levent Ulucan (Inxmail), Arne Allisat and Tobias Herkula (1&1 Mail &
    Media) and Sven Krohlas (BFK Edv-consulting).
 
 11.  References
@@ -837,7 +893,7 @@ Internet-Draft             CFBL Address Header             February 2022
 
 
 
-Benecke                  Expires 15 August 2022                [Page 15]
+Benecke                  Expires 18 August 2022                [Page 16]
 
 Internet-Draft             CFBL Address Header             February 2022
 
@@ -846,6 +902,10 @@ Internet-Draft             CFBL Address Header             February 2022
               Requirement Levels", BCP 14, RFC 2119,
               DOI 10.17487/RFC2119, March 1997,
               <https://www.rfc-editor.org/info/rfc2119>.
+
+   [RFC5322]  Resnick, P., Ed., "Internet Message Format", RFC 5322,
+              DOI 10.17487/RFC5322, October 2008,
+              <https://www.rfc-editor.org/info/rfc5322>.
 
    [RFC6449]  Falk, J., Ed., "Complaint Feedback Loop Operational
               Recommendations", RFC 6449, DOI 10.17487/RFC6449, November
@@ -884,19 +944,20 @@ Internet-Draft             CFBL Address Header             February 2022
               RFC 6590, DOI 10.17487/RFC6590, April 2012,
               <https://www.rfc-editor.org/info/rfc6590>.
 
+
+
+
+
+
+Benecke                  Expires 18 August 2022                [Page 17]
+
+Internet-Draft             CFBL Address Header             February 2022
+
+
    [RFC8058]  Levine, J. and T. Herkula, "Signaling One-Click
               Functionality for List Email Headers", RFC 8058,
               DOI 10.17487/RFC8058, January 2017,
               <https://www.rfc-editor.org/info/rfc8058>.
-
-
-
-
-
-Benecke                  Expires 15 August 2022                [Page 16]
-
-Internet-Draft             CFBL Address Header             February 2022
-
 
 Author's Address
 
@@ -944,9 +1005,4 @@ Author's Address
 
 
 
-
-
-
-
-
-Benecke                  Expires 15 August 2022                [Page 17]
+Benecke                  Expires 18 August 2022                [Page 18]
