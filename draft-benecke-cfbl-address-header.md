@@ -1,7 +1,7 @@
 ---
 title: "Complaint Feedback Loop Address Header"
 abbrev: "CFBL Address Header"
-docname: draft-benecke-cfbl-address-header-06
+docname: draft-benecke-cfbl-address-header-07
 category: exp
 
 ipr: trust200902
@@ -91,7 +91,7 @@ In summary, this document has the following objectives:
 ## Scope of this Experiment
 The CFBL-Address header and the CFBL-Feedback-ID header are an experiment. 
 Participation in this experiment consists of adding the CFBL-Address-Header on email sender side or by using the CFBl-Address-Header to send FBL reports to the provided address on mailbox provider side.
-Feedback on the results of this experiment can be emailed to the author or raised as an issue at https://github.com/jpbede/rfc-cfbl-address-header/.
+Feedback on the results of this experiment can be emailed to the author, raised as an issue at https://github.com/jpbede/rfc-cfbl-address-header/ or can be emailed to the IETF cfbl mailing list (cfbl@ietf.org).
 
 The goal of this experiment is to answer the following questions based on real-world deployments:
 
