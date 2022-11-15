@@ -1,8 +1,9 @@
 ---
 title: "Complaint Feedback Loop Address Header"
 abbrev: "CFBL Address Header"
-docname: draft-benecke-cfbl-address-header-07
+docname: draft-benecke-cfbl-address-header-08
 category: exp
+stream: independent
 
 ipr: trust200902
 area: art
@@ -38,7 +39,7 @@ informative:
 --- abstract
 
 This document describes a method that allows an email sender to specify a complaint feedback loop (FBL) address as an email header.
-Also it defines the rules for processing and forwarding such a complaint.
+Also, it defines the rules for processing and forwarding such a complaint.
 The motivation for this arises out of the absence of a standardized and automated way to provide mailbox providers with an address for a complaint feedback loop.
 Currently, providing and maintaining such an address is a manual and time-consuming process for email senders and providers.
 
@@ -122,9 +123,13 @@ document are to be interpreted as described in BCP 14 {{!RFC2119}} {{!RFC8174}} 
 
 The keyword "CFBL" in this document is the abbreviation for "complaint feedback loop" and will hereafter be used.
 
-The keyword "MBP" in this document is the abbreviation for "mailbox provider", it is the party who receives an email, and will be used hereafter.
+The keyword "MBP" in this document is the abbreviation for "mailbox provider", it is the party who receives an email and provides an email mailbox to end users. It will be used hereafter.
 
-The keyword "email sender" in this document is used to describe the party who sends an email, this can be an MBP, a broadcast marketing list operator or any other email sending party. It will be used hereafter.
+The keyword "ESP" in this document is the abbreviation for "email service provider", it is used to describe a party who provides email services to a third party e.g. broadcast marketing list operator, 
+in most cases an ESP does not provide mailbox services. It will be used hereafter.
+
+The keyword "email sender" in this document is used to describe the party who sends an email. This can be an MBP, a broadcast marketing list operator or any other email sending party. 
+It will be used hereafter.
 
 # Requirements
 
@@ -191,13 +196,13 @@ DKIM-Signature: v=1; a=rsa-sha256; d=example.com;
 This is a super awesome newsletter.
 ~~~
 
-### Complex
-If the domain in {{!RFC5322}}.From of differs from the domain in the CFBL-Address header,
+### Third Party Address
+If the domain in {{!RFC5322}}.From differs from the domain in the CFBL-Address header,
 the domain of the CFBL-Address header MUST be covered by an additional valid {{!DKIM=RFC6376}} signature.
 Both signatures MUST meet the requirements described in [](#received-email-dkim-signature).
 
-This double DKIM signature ensures that both the domain owner of the From: domain and the domain owner of the CFBL-Address: domain
-agree to receive the complaint reports on the address from the CFBL-Address: header.
+This double DKIM signature ensures that both, the domain owner of the {{!RFC5322}}.From domain and the domain owner of the CFBL-Address domain,
+agree to receive the complaint reports on the address from the CFBL-Address header.
 
 The following example meets this case:
 
@@ -209,8 +214,35 @@ Subject: Super awesome deals for you
 CFBL-Address: fbl@super-saas-mailer.com; report=arf
 Message-ID: <a37e51bf-3050-2aab-1234-543a0828d14a@example.com>
 Content-Type: text/plain; charset=utf-8
+DKIM-Signature: v=1; a=rsa-sha256; d=super-saas-mailer.com; s=system;
+       h=Subject:From:To:Message-ID:CFBL-Feedback-ID:CFBL-Address;
 DKIM-Signature: v=1; a=rsa-sha256; d=example.com; s=news;
        h=Subject:From:To:Message-ID:CFBL-Feedback-ID:CFBL-Address;
+       
+This is a super awesome newsletter.
+~~~
+
+If an ESP does not have full control over the signing process and wants to accept pre-signed mails from its email senders,
+the double signature described above can be omitted and the ESP can sign with its domain.
+Therefor the pre-signed email MUST NOT include "CFBL-Address" and "CFBL-Feedback-ID" in its h= tag.
+
+This way the ESP has the possibility to accept the emails and can inject their own CFBL-Address.
+
+Due to this granted exception a malicious actor can destroy this possibility with over-signing.
+This potential harm is described in [](#security-considerations).
+
+The following example meets this case:
+
+~~~
+Return-Path: <newsletter@example.com>
+From: Awesome Newsletter <newsletter@example.com>
+To: receiver@example.org
+Subject: Super awesome deals for you
+CFBL-Address: fbl@super-saas-mailer.com; report=arf
+Message-ID: <a37e51bf-3050-2aab-1234-543a0828d14a@example.com>
+Content-Type: text/plain; charset=utf-8
+DKIM-Signature: v=1; a=rsa-sha256; d=example.com; s=news;
+       h=Subject:From:To:Message-ID;
 DKIM-Signature: v=1; a=rsa-sha256; d=super-saas-mailer.com; s=system;
        h=Subject:From:To:Message-ID:CFBL-Feedback-ID:CFBL-Address;
 
@@ -318,7 +350,7 @@ An example: someone sends an invitation to his friends. For some reason, someone
 Now, if there is too fast automatic account suspension, the sender's account will be blocked and the sender will not be able to access his mails.
 
 MBPs and email senders must take appropriate measures to prevent this.
-MBPs and email senders therefore have, mostly proprietary, ways to assess the trustworthiness of an account.
+MBPs and email senders therefore have - mostly proprietary - ways to assess the trustworthiness of an account.
 For example, MBPs and email senders may take into account the age of the account and/or any previous account suspension before suspending an account.
 
 ## Enumeration attacks / provoking unsubscription 
@@ -354,6 +386,13 @@ As the MBP now generates an automatic complaint report for the received email, t
 
 The receiving MBP must take appropriate measures. One possible countermeasure could be, for example, pre-existing reputation data, usually proprietary data.
 Using this data, the MBP can assess the trustworthiness of an email sender and decide whether to send a complaint report based on this information.
+
+## Over-Signing when accepting pre-signed emails
+When accepting pre-signed mails, a malicious actor can destroy the possibility of adding the CFBL-Address header by the ESP, with "over-signing".
+This methode "over-signing" is described in {{!DKIM=RFC6376}} Section 5.4.
+
+The ESP must take appropriate measures.
+ESPs therefore have - mostly proprietary - methods for assessing the trustworthiness of an account and decide on this basis whether to accept pre-signed emails.
 
 # IANA Considerations
 
