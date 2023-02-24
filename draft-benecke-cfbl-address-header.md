@@ -1,7 +1,7 @@
 ---
 title: "Complaint Feedback Loop Address Header"
 abbrev: "CFBL Address Header"
-docname: draft-benecke-cfbl-address-header-09
+docname: draft-benecke-cfbl-address-header-10
 category: exp
 stream: independent
 
@@ -43,9 +43,7 @@ Also, it defines the rules for processing and forwarding such a complaint.
 The motivation for this arises out of the absence of a standardized and automated way to provide Mailbox Providers with an address for a complaint feedback loop.
 Currently, providing and maintaining such an address is a manual and time-consuming process for Message Originators and Mailbox Providers.
 
-It is unclear, at the time of publication, whether the function provided by this document has widespread demand, and whether the
-mechanism offered will be adopted and found to be useful. Therefore, this is being published as an Experiment, looking for a constituency
-of implementers and deployers, and for feedback on the operational utility. The document is produced through the Independent RFC stream
+The mechanism specified in this document is being published as an experiment, to gauge interest of, and gather feedback from implementers and deployers. This document is produced through the Independent RFC stream
 and was not subject to the IETF's approval process.
 
 --- middle
@@ -54,19 +52,17 @@ and was not subject to the IETF's approval process.
 The topic and goal of this document is to extend the complaint feedback loop recommendations described in {{!RFC6449}} with an automated way to provide the necessary information to Mailbox Providers, 
 to report message handling actions taken by message recipients, such as "mark as spam", back to the Message Originator.
 
-As described in {{!RFC6449}} the registration for such a complaint feedback loop needs to be done manually by a human at any Mailbox Provider who provides a complaint feedback loop.
-The key underpinning of {{!RFC6449}} is that access to the complaint feedback loop is a privilege, and the Mailbox Providers are not prepared to send feedback to anyone it cannot reasonably believe are legitimate.
-However, a manual registration and management can be quite time-consuming if there are new feedback loops rising up, or the Message Originator wants to add new IP addresses or DKIM domains.
+As described in {{!RFC6449}}, the registration for such a complaint feedback loop needs to be done manually by a human at any Mailbox Provider who provides a complaint feedback loop.
+The key underpinning of {{!RFC6449}} is that access to the complaint feedback loop is a privilege, and that Mailbox Providers are not prepared to send feedback to anyone they cannot reasonably believe are legitimate.
+However, manual registration and management can be quite time-consuming if there are new feedback loops rising up, or if the Message Originator wants to add new IP addresses or DKIM domains.
 In addition, a manual process is not well suited and/or feasible for smaller Mailbox Providers.
 Because of the manual process involved, the Message Originator has to go through all providers again, delete his existing subscriptions and register with their new complaint address.
 
-Message Originators can add a header field, willing Mailbox Providers can use it to send the Feedback Messages to the specified complaint address.
-The Message Originator only needs to add a message header field and does not need to manually register with each Feedback Provider.
-The simplification or extension of a manual registration and verification process would be another advantage for the Mailbox Providers.
+Here we propose that Message Originators add a header field without the need to manually register with each Feedback Provider., and that willing Mailbox Providers can use it to send the Feedback Messages to the specified complaint address.  This simplification or extension of a manual registration and verification process would be another advantage for the Mailbox Providers.
 
 A new message header field, rather than a new DNS record, was chosen to easily distinguish between multiple Message Originators without requiring user or administrator intervention.
 For example, if a company uses multiple systems, each system can set this header field on its own without requiring users or administrators to make any changes to their DNS.
-No additional DNS lookup is required on the Mailbox Provider side to obtain the complaint address.
+No additional DNS lookup is required of the Mailbox Provider side to obtain the complaint address.
 
 The proposed mechanism is capable of being operated in compliance with the data privacy laws.
 
@@ -83,7 +79,7 @@ In summary, this document has the following objectives:
 * Provide a data privacy safe option for a complaint feedback loop.
 
 ## Scope of this Experiment
-The CFBL-Address header field and the CFBL-Feedback-ID header field are an experiment. 
+The CFBL-Address header field and the CFBL-Feedback-ID header field comprise an experiment. 
 Participation in this experiment consists of adding the CFBL-Address header field on Message Originators side or by using the CFBL-Address header field to send Feedback Messages to the provided address on Mailbox Provider side.
 Feedback on the results of this experiment can be emailed to the author, raised as an issue at https://github.com/jpbede/rfc-cfbl-address-header/ or can be emailed to the IETF cfbl mailing list (cfbl@ietf.org).
 
@@ -99,10 +95,10 @@ The goal of this experiment is to answer the following questions based on real-w
 This experiment will be considered successful if the CFBL-Address header field is used by a leading Mailbox Provider in a country and by at least two Message Originators within the next two years
 and these parties successfully use the address specified in the header field to exchange Feedback Messages.
 
-If this experiment is successful and these header fields prove to be valuable and popular, it may be taken to the IETF for
-further discussion and revision. One possible outcome could be that a working group creates a specification for the standards track.
+If this experiment is successful and these header fields prove to be valuable and popular, the header fields may be taken to the IETF for
+further discussion and revision.
 
-## Difference to One-Click-Unsubscribe
+## How CFBL differs from One-Click-Unsubscribe
 For good reasons, the One-Click-Unsubscribe {{?RFC8058}} signaling already exists, which may have several interests in common with this document.
 However, this header field requires the List-Unsubscribe header field, whose purpose is to provide the link to unsubscribe from a list.
 For this reason, this header field is only used by operators of broadcast marketing lists or mailing lists, not in normal email traffic.
@@ -235,15 +231,14 @@ This is a super awesome newsletter.
 ~~~
 
 ### DKIM Signature {#received-message-dkim-signature}
-The CFBL-Address header field MUST be included in the "h=" tag of the aforementioned valid DKIM-Signature.
-When the CFBL-Feedback-ID header field is present, it MUST also be included in the "h=" tag of the aforementioned valid DKIM signature.
+When present, CFBL-Address and CFBL-Feedback-ID header fields MUST be included in the "h=" tag of the aforementioned valid DKIM-Signature.
 
 If the domain has neither the required coverage by a valid DKIM signature nor the required header field coverage by the "h=" tag, the Mailbox Provider SHALL NOT send a report message.
 
 ## CFBL-Feedback-ID Header Field {#cfbl-feedback-id-header-field}
 The Message Originator MAY include a CFBL-Feedback-ID header field in its messages out of various reasons, e.g. their feedback loop processing system can't do anything with the Message-ID header field.
 
-It is highly RECOMMENDED that the header field includes a hard to forge component such as an {{?HMAC=RFC2104}} using a secret key, instead of a plain-text string.
+It is RECOMMENDED that the header field include a hard to forge protection component such as an {{?HMAC=RFC2104}} using a secret key, instead of a plain-text string.
 
 ## Receiving Report Address
 The receiving report address provided in the CFBL-Address header field MUST accept {{!ARF=RFC5965}} reports.
@@ -278,7 +273,7 @@ CFBL-Address: fbl@example.com; report=xarf
 ## Message Originator
 A Message Originator who wishes to use this new mechanism to receive Feedback Messages MUST include a CFBL-Address header field in their messages.
 
-It is strongly RECOMMENDED that these Feedback Messages be processed automatically. Each Message Originator must decide for themselves what action to take after receiving a Feedback Message.
+It is RECOMMENDED that these Feedback Messages be processed automatically. Each Message Originator must decide for themselves what action to take after receiving a Feedback Message.
 
 The Message Originator MUST take action to address the described requirements in [Requirements](#requirements).
 
@@ -324,6 +319,7 @@ This is an existing problem with any existing email address and is not created b
 ## Automatic Suspension of an Account
 Receiving a Feedback Message regarding a Message Author can cause the Message Author to be unreachable if an automatic account suspension occurs too quickly.
 An example: someone sends an invitation to their friends. For some reason, someone marks this message as spam.
+
 Now, if there is too fast automatic account suspension, the Message Author's account will be blocked and the Message Author will not be able to access their emails 
 or is able to send further messages, depending on the account suspension the Message Originator has chosen.
 
