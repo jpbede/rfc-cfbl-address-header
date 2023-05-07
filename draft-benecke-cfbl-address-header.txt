@@ -4,12 +4,12 @@
 
 Network Working Group                                         J. Benecke
 Internet-Draft                                 CleverReach GmbH & Co. KG
-Intended status: Experimental                                 6 May 2023
-Expires: 7 November 2023
+Intended status: Experimental                                 7 May 2023
+Expires: 8 November 2023
 
 
                  Complaint Feedback Loop Address Header
-                  draft-benecke-cfbl-address-header-11
+                  draft-benecke-cfbl-address-header-13
 
 Abstract
 
@@ -43,7 +43,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 7 November 2023.
+   This Internet-Draft will expire on 8 November 2023.
 
 Copyright Notice
 
@@ -53,7 +53,7 @@ Copyright Notice
 
 
 
-Benecke                  Expires 7 November 2023                [Page 1]
+Benecke                  Expires 8 November 2023                [Page 1]
 
 Internet-Draft             CFBL Address Header                  May 2023
 
@@ -72,7 +72,7 @@ Table of Contents
    2.  Definitions . . . . . . . . . . . . . . . . . . . . . . . . .   5
    3.  Requirements  . . . . . . . . . . . . . . . . . . . . . . . .   5
      3.1.  Received Message  . . . . . . . . . . . . . . . . . . . .   5
-       3.1.1.  Strict  . . . . . . . . . . . . . . . . . . . . . . .   5
+       3.1.1.  Strict  . . . . . . . . . . . . . . . . . . . . . . .   6
        3.1.2.  Relaxed . . . . . . . . . . . . . . . . . . . . . . .   6
        3.1.3.  Third Party Address . . . . . . . . . . . . . . . . .   7
        3.1.4.  DKIM Signature  . . . . . . . . . . . . . . . . . . .   8
@@ -93,12 +93,12 @@ Table of Contents
      6.3.  Enumeration Attacks / Provoking Unsubscription  . . . . .  11
      6.4.  Data Privacy  . . . . . . . . . . . . . . . . . . . . . .  12
      6.5.  Abusing for Validity and Existence Queries  . . . . . . .  12
-   7.  IANA Considerations . . . . . . . . . . . . . . . . . . . . .  12
-     7.1.  CFBL-Address  . . . . . . . . . . . . . . . . . . . . . .  12
+   7.  IANA Considerations . . . . . . . . . . . . . . . . . . . . .  13
+     7.1.  CFBL-Address  . . . . . . . . . . . . . . . . . . . . . .  13
      7.2.  CFBL-Feedback-ID  . . . . . . . . . . . . . . . . . . . .  13
    8.  Examples  . . . . . . . . . . . . . . . . . . . . . . . . . .  13
      8.1.  Simple  . . . . . . . . . . . . . . . . . . . . . . . . .  13
-     8.2.  Data Privacy Safe Report  . . . . . . . . . . . . . . . .  14
+     8.2.  Data Privacy Safe Report  . . . . . . . . . . . . . . . .  15
      8.3.  Data Privacy Safe Report with HMAC  . . . . . . . . . . .  15
    9.  Acknowledgments . . . . . . . . . . . . . . . . . . . . . . .  16
    10. References  . . . . . . . . . . . . . . . . . . . . . . . . .  16
@@ -109,19 +109,19 @@ Table of Contents
 
 
 
-Benecke                  Expires 7 November 2023                [Page 2]
+Benecke                  Expires 8 November 2023                [Page 2]
 
 Internet-Draft             CFBL Address Header                  May 2023
 
 
 1.  Introduction and Motivation
 
-   The topic and goal of this document is to extend the complaint
-   feedback loop recommendations described in [RFC6449] (the terminology
-   used in this document hereafter is taken from there) with an
-   automated way to provide the necessary information to Mailbox
-   Providers, to report message handling actions taken by message
-   recipients, such as "mark as spam", back to the Message Originator.
+   This memo extends the complaint feedback loop recommendations
+   described in {!RFC6449}} with an automated way to provide the
+   necessary information by the Message Originator to Mailbox Providers.
+   The reader should be familiar with the terminology and concepts in
+   that document; terms beginning with capital letters used in this memo
+   are described in that document.
 
    As described in [RFC6449], the registration for such a complaint
    feedback loop needs to be done manually by a human at any Mailbox
@@ -151,7 +151,24 @@ Internet-Draft             CFBL Address Header                  May 2023
    Mailbox Provider side to obtain the complaint address.
 
    The proposed mechanism is capable of being operated in compliance
-   with the data privacy laws e.g.  GDPR or CCPA.
+   with the data privacy laws e.g.  GDPR or CCPA.  As described in
+   Section 6.4, a Feedback Message may contain personal data, this
+   document describes a way to omit this personal data when sending the
+   Feedback Message and only send back a header field.
+
+
+
+
+
+
+
+
+
+
+Benecke                  Expires 8 November 2023                [Page 3]
+
+Internet-Draft             CFBL Address Header                  May 2023
+
 
    Nevertheless, the described mechanism below potentially permits a
    kind of man-in-the-middle attack between the domain owner and the
@@ -161,14 +178,6 @@ Internet-Draft             CFBL Address Header                  May 2023
    number of actions, such as blocking of accounts or deactivating
    recipient addresses.  This potential harm and others are described
    with potential countermeasures in Section 6.
-
-
-
-
-Benecke                  Expires 7 November 2023                [Page 3]
-
-Internet-Draft             CFBL Address Header                  May 2023
-
 
    In summary, this document has the following objectives:
 
@@ -208,23 +217,20 @@ Internet-Draft             CFBL Address Header                  May 2023
    *  Does the presence of the CFBL-Address and CFBL-Feedback-ID header
       field introduce additional security issues?
 
+
+
+
+
+Benecke                  Expires 8 November 2023                [Page 4]
+
+Internet-Draft             CFBL Address Header                  May 2023
+
+
    *  What additional security measures/checks need to be performed at
       the Mailbox Provider before a Feedback Message is sent?
 
    *  What additional security measures/checks need to be performed at
       the Message Originator after a Feedback Message is received?
-
-
-
-
-
-
-
-
-Benecke                  Expires 7 November 2023                [Page 4]
-
-Internet-Draft             CFBL Address Header                  May 2023
-
 
    This experiment will be considered successful if the CFBL-Address
    header field is used by a leading Mailbox Provider and by at least
@@ -267,6 +273,15 @@ Internet-Draft             CFBL Address Header                  May 2023
    message that is sent from the Message Originator to the Mailbox
    Provider and about which a report is to be sent later, must meet.
 
+
+
+
+
+Benecke                  Expires 8 November 2023                [Page 5]
+
+Internet-Draft             CFBL Address Header                  May 2023
+
+
 3.1.1.  Strict
 
    If the domain in the [RFC5322].From and the domain in the CFBL-
@@ -274,13 +289,6 @@ Internet-Draft             CFBL Address Header                  May 2023
    valid [DKIM] signature.  In this case, the DKIM "d=" parameter and
    the [RFC5322].From field have identical domains.  This signature MUST
    meet the requirements described in Section 3.1.4.
-
-
-
-Benecke                  Expires 7 November 2023                [Page 5]
-
-Internet-Draft             CFBL Address Header                  May 2023
-
 
    The following example meets this case:
 
@@ -325,15 +333,7 @@ Internet-Draft             CFBL Address Header                  May 2023
 
 
 
-
-
-
-
-
-
-
-
-Benecke                  Expires 7 November 2023                [Page 6]
+Benecke                  Expires 8 November 2023                [Page 6]
 
 Internet-Draft             CFBL Address Header                  May 2023
 
@@ -389,7 +389,7 @@ Internet-Draft             CFBL Address Header                  May 2023
 
 
 
-Benecke                  Expires 7 November 2023                [Page 7]
+Benecke                  Expires 8 November 2023                [Page 7]
 
 Internet-Draft             CFBL Address Header                  May 2023
 
@@ -424,9 +424,9 @@ Internet-Draft             CFBL Address Header                  May 2023
 
 3.2.  Multiple CFBL-Address Header Fields
 
-   A Message can only have exactly one CFBL-Address header field.  All
-   further occurrences of the CFBL-Address header field MUST be ignored
-   after the first valid occurrence.
+   A Message can contain multiple CFBL-Address header fields.  These
+   multiple header fields MUST be treated as a list of receive report
+   addresses so that each address can receive a report.
 
 3.3.  CFBL-Feedback-ID Header Field
 
@@ -445,7 +445,7 @@ Internet-Draft             CFBL Address Header                  May 2023
 
 
 
-Benecke                  Expires 7 November 2023                [Page 8]
+Benecke                  Expires 8 November 2023                [Page 8]
 
 Internet-Draft             CFBL Address Header                  May 2023
 
@@ -501,7 +501,7 @@ Internet-Draft             CFBL Address Header                  May 2023
 
 
 
-Benecke                  Expires 7 November 2023                [Page 9]
+Benecke                  Expires 8 November 2023                [Page 9]
 
 Internet-Draft             CFBL Address Header                  May 2023
 
@@ -520,16 +520,18 @@ Internet-Draft             CFBL Address Header                  May 2023
    Originator, they MAY query the CFBL-Address header field and forward
    the report to the provided complaint feedback loop address.
 
-   The Mailbox Provider MUST validate the requirements described in
-   Section 3 and MUST take action to address the requirements described
-   in Section 3 when sending Feedback Messages.
+   The Mailbox Provider MUST validate the DKIM requirements of the
+   received Message described in Section 3.1 and MUST take action to
+   address the requirements described in Section 3.5 when sending
+   Feedback Messages.
 
 5.  Header Field Syntax
 
 5.1.  CFBL-Address
 
    The following ABNF imports fields, CFWS, CRLF and addr-spec from
-   [MAIL].  The CFBL-Address header field is compatible with [RFC6532].
+   [MAIL].  Implementations of the CFBL-Address header field MUST comply
+   with [RFC6532].
 
    fields =/ cfbl-address
 
@@ -548,19 +550,23 @@ Internet-Draft             CFBL Address Header                  May 2023
 
    fid = 1*(atext / ":" / CFWS)
 
+
+
+
+
+
+
+
+Benecke                  Expires 8 November 2023               [Page 10]
+
+Internet-Draft             CFBL Address Header                  May 2023
+
+
    Whitespace is ignored in the fid value and MUST be ignored when
    reassembling the original feedback id.
    In particular, when adding the header field the Message Originator
    can safely insert CFWS in the fid value in arbitrary places to
    conform to line-length limits.
-
-
-
-
-Benecke                  Expires 7 November 2023               [Page 10]
-
-Internet-Draft             CFBL Address Header                  May 2023
-
 
 6.  Security Considerations
 
@@ -604,19 +610,19 @@ Internet-Draft             CFBL Address Header                  May 2023
    place.  This is also an existing problem with the current feedback
    loop implementation and/or One-Click Unsubscription [RFC8058].
 
+
+
+
+Benecke                  Expires 8 November 2023               [Page 11]
+
+Internet-Draft             CFBL Address Header                  May 2023
+
+
    The Message Originator must take appropriate measures, a
    countermeasure would be, that the CFBL-Feedback-ID header field, if
    used, use a hard-to-forge component such as a [HMAC] with a secret
    key instead of a plaintext string to make an enumeration attack
    impossible.
-
-
-
-
-Benecke                  Expires 7 November 2023               [Page 11]
-
-Internet-Draft             CFBL Address Header                  May 2023
-
 
 6.4.  Data Privacy
 
@@ -659,20 +665,21 @@ Internet-Draft             CFBL Address Header                  May 2023
    Originator and decide whether to send a Feedback Message based on
    this information.
 
+
+
+
+
+Benecke                  Expires 8 November 2023               [Page 12]
+
+Internet-Draft             CFBL Address Header                  May 2023
+
+
 7.  IANA Considerations
 
 7.1.  CFBL-Address
 
    The IANA is requested to register a new header field, per [RFC3864],
    into the "Provisional Message Header Field Names" registry:
-
-
-
-
-Benecke                  Expires 7 November 2023               [Page 12]
-
-Internet-Draft             CFBL Address Header                  May 2023
-
 
    Header field name: CFBL-Address
 
@@ -708,6 +715,21 @@ Internet-Draft             CFBL Address Header                  May 2023
 
    Email about the report will be generated:
 
+
+
+
+
+
+
+
+
+
+
+Benecke                  Expires 8 November 2023               [Page 13]
+
+Internet-Draft             CFBL Address Header                  May 2023
+
+
    Return-Path: <sender@mailer.example.com>
    From: Awesome Newsletter <newsletter@example.com>
    To: me@example.net
@@ -722,13 +744,6 @@ Internet-Draft             CFBL Address Header                  May 2023
    This is a super awesome newsletter.
 
    Resulting ARF report:
-
-
-
-Benecke                  Expires 7 November 2023               [Page 13]
-
-Internet-Draft             CFBL Address Header                  May 2023
-
 
    ------=_Part_240060962_1083385345.1592993161900
    Content-Type: message/feedback-report
@@ -760,6 +775,17 @@ Internet-Draft             CFBL Address Header                  May 2023
    This is a super awesome newsletter.
    ------=_Part_240060962_1083385345.1592993161900--
 
+
+
+
+
+
+
+Benecke                  Expires 8 November 2023               [Page 14]
+
+Internet-Draft             CFBL Address Header                  May 2023
+
+
 8.2.  Data Privacy Safe Report
 
    Email about the report will be generated:
@@ -778,13 +804,6 @@ Internet-Draft             CFBL Address Header                  May 2023
    This is a super awesome newsletter.
 
    Resulting ARF report contains only the CFBL-Feedback-ID:
-
-
-
-Benecke                  Expires 7 November 2023               [Page 14]
-
-Internet-Draft             CFBL Address Header                  May 2023
-
 
    ------=_Part_240060962_1083385345.1592993161900
    Content-Type: message/feedback-report
@@ -809,6 +828,20 @@ Internet-Draft             CFBL Address Header                  May 2023
 
    Email about the report will be generated:
 
+
+
+
+
+
+
+
+
+
+Benecke                  Expires 8 November 2023               [Page 15]
+
+Internet-Draft             CFBL Address Header                  May 2023
+
+
    Return-Path: <sender@mailer.example.com>
    From: Awesome Newsletter <newsletter@example.com>
    To: me@example.net
@@ -824,23 +857,6 @@ Internet-Draft             CFBL Address Header                  May 2023
    This is a super awesome newsletter.
 
    Resulting ARF report contains only the CFBL-Feedback-ID:
-
-
-
-
-
-
-
-
-
-
-
-
-
-Benecke                  Expires 7 November 2023               [Page 15]
-
-Internet-Draft             CFBL Address Header                  May 2023
-
 
    ------=_Part_240060962_1083385345.1592993161900
    Content-Type: message/feedback-report
@@ -873,6 +889,15 @@ Internet-Draft             CFBL Address Header                  May 2023
 
 10.1.  Normative References
 
+
+
+
+
+Benecke                  Expires 8 November 2023               [Page 16]
+
+Internet-Draft             CFBL Address Header                  May 2023
+
+
    [ARF]      Shafranovich, Y., Levine, J., and M. Kucherawy, "An
               Extensible Format for Email Feedback Reports", RFC 5965,
               DOI 10.17487/RFC5965, August 2010,
@@ -886,17 +911,6 @@ Internet-Draft             CFBL Address Header                  May 2023
    [MAIL]     Resnick, P., Ed., "Internet Message Format", RFC 5322,
               DOI 10.17487/RFC5322, October 2008,
               <https://www.rfc-editor.org/rfc/rfc5322>.
-
-
-
-
-
-
-
-Benecke                  Expires 7 November 2023               [Page 16]
-
-Internet-Draft             CFBL Address Header                  May 2023
-
 
    [RFC2119]  Bradner, S., "Key words for use in RFCs to Indicate
               Requirement Levels", BCP 14, RFC 2119,
@@ -933,6 +947,13 @@ Internet-Draft             CFBL Address Header                  May 2023
 
 10.2.  Informative References
 
+
+
+Benecke                  Expires 8 November 2023               [Page 17]
+
+Internet-Draft             CFBL Address Header                  May 2023
+
+
    [HMAC]     Krawczyk, H., Bellare, M., and R. Canetti, "HMAC: Keyed-
               Hashing for Message Authentication", RFC 2104,
               DOI 10.17487/RFC2104, February 1997,
@@ -942,17 +963,6 @@ Internet-Draft             CFBL Address Header                  May 2023
               Procedures for Message Header Fields", BCP 90, RFC 3864,
               DOI 10.17487/RFC3864, September 2004,
               <https://www.rfc-editor.org/rfc/rfc3864>.
-
-
-
-
-
-
-
-Benecke                  Expires 7 November 2023               [Page 17]
-
-Internet-Draft             CFBL Address Header                  May 2023
-
 
    [RFC6590]  Falk, J., Ed. and M. Kucherawy, Ed., "Redaction of
               Potentially Sensitive Data from Mail Abuse Reports",
@@ -995,14 +1005,4 @@ Author's Address
 
 
 
-
-
-
-
-
-
-
-
-
-
-Benecke                  Expires 7 November 2023               [Page 18]
+Benecke                  Expires 8 November 2023               [Page 18]

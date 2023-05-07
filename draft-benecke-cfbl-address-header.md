@@ -1,7 +1,7 @@
 ---
 title: "Complaint Feedback Loop Address Header"
 abbrev: "CFBL Address Header"
-docname: draft-benecke-cfbl-address-header-11
+docname: draft-benecke-cfbl-address-header-13
 category: exp
 stream: independent
 
@@ -49,8 +49,8 @@ and was not subject to the IETF's approval process.
 --- middle
 
 # Introduction and Motivation
-The topic and goal of this document is to extend the complaint feedback loop recommendations described in {{!RFC6449}} (the terminology used in this document hereafter is taken from there) with an automated way 
-to provide the necessary information to Mailbox Providers, to report message handling actions taken by message recipients, such as "mark as spam", back to the Message Originator.
+This memo extends the complaint feedback loop recommendations described in {!RFC6449}} with an automated way to provide the necessary information by the Message Originator to Mailbox Providers.
+The reader should be familiar with the terminology and concepts in that document; terms beginning with capital letters used in this memo are described in that document.
 
 As described in {{!RFC6449}}, the registration for such a complaint feedback loop needs to be done manually by a human at any Mailbox Provider who provides a complaint feedback loop.
 The key underpinning of {{!RFC6449}} is that access to the complaint feedback loop is a privilege, and that Mailbox Providers are not prepared to send feedback to anyone they cannot reasonably believe are legitimate.
@@ -65,6 +65,7 @@ For example, if a company uses multiple systems, each system can set this header
 No additional DNS lookup is required of the Mailbox Provider side to obtain the complaint address.
 
 The proposed mechanism is capable of being operated in compliance with the data privacy laws e.g. GDPR or CCPA.
+As described in [](#data-privacy), a Feedback Message may contain personal data, this document describes a way to omit this personal data when sending the Feedback Message and only send back a header field.
 
 Nevertheless, the described mechanism below potentially permits a kind of man-in-the-middle attack between the domain owner and the recipient.
 A bad actor can generate forged reports to be "from" a domain name the bad actor is attacking and send this reports to the complaint feedback loop address.
@@ -230,7 +231,8 @@ When present, CFBL-Address and CFBL-Feedback-ID header fields MUST be included i
 If the domain is neither matched by a valid DKIM signature nor the header field is covered by the "h=" tag, the Mailbox Provider SHALL NOT send a report message.
 
 ## Multiple CFBL-Address Header Fields
-A Message can only have exactly one CFBL-Address header field. All further occurrences of the CFBL-Address header field MUST be ignored after the first valid occurrence.
+A Message can contain multiple CFBL-Address header fields.
+These multiple header fields MUST be treated as a list of receive report addresses so that each address can receive a report.
 
 ## CFBL-Feedback-ID Header Field {#cfbl-feedback-id-header-field}
 The Message Originator MAY include a CFBL-Feedback-ID header field in its messages out of various reasons, e.g. their feedback loop processing system can't do anything with the Message-ID header field.
@@ -279,14 +281,14 @@ The Message Originator MUST take action to address the described requirements in
 A Mailbox Provider who wants to collect user actions that indicate the message was not wanted and send a Feedback Message to the Message Originator, 
 they MAY query the CFBL-Address header field and forward the report to the provided complaint feedback loop address.
 
-The Mailbox Provider MUST validate the requirements described in [Requirements](#requirements) and 
-MUST take action to address the requirements described in [Requirements](#requirements) when sending Feedback Messages.
+The Mailbox Provider MUST validate the DKIM requirements of the received Message described in [](#received-message) and 
+MUST take action to address the requirements described in [](#complaint-report) when sending Feedback Messages.
 
 # Header Field Syntax
 
 ## CFBL-Address {#cfbl-address-header-field}
 The following ABNF imports fields, CFWS, CRLF and addr-spec from {{!MAIL=RFC5322}}.
-The CFBL-Address header field is compatible with {{!RFC6532}}.
+Implementations of the CFBL-Address header field MUST comply with {{!RFC6532}}.
 
 ~~~ abnf
 fields =/ cfbl-address
@@ -338,7 +340,7 @@ This is also an existing problem with the current feedback loop implementation a
 The Message Originator must take appropriate measures, a countermeasure would be, that the CFBL-Feedback-ID header field, 
 if used, use a hard-to-forge component such as a {{?HMAC=RFC2104}} with a secret key instead of a plaintext string to make an enumeration attack impossible.
 
-## Data Privacy
+## Data Privacy {#data-privacy}
 The provision of such a header field itself does not pose a data privacy issue.
 The resulting ARF/XARF report sent by the Mailbox Provider to the Message Originator may violate a data privacy law because it may contain personal data.
 
