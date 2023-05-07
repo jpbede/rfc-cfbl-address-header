@@ -1,7 +1,7 @@
 ---
 title: "Complaint Feedback Loop Address Header"
 abbrev: "CFBL Address Header"
-docname: draft-benecke-cfbl-address-header-10
+docname: draft-benecke-cfbl-address-header-11
 category: exp
 stream: independent
 
@@ -49,22 +49,22 @@ and was not subject to the IETF's approval process.
 --- middle
 
 # Introduction and Motivation
-The topic and goal of this document is to extend the complaint feedback loop recommendations described in {{!RFC6449}} with an automated way to provide the necessary information to Mailbox Providers, 
-to report message handling actions taken by message recipients, such as "mark as spam", back to the Message Originator.
+The topic and goal of this document is to extend the complaint feedback loop recommendations described in {{!RFC6449}} (the terminology used in this document hereafter is taken from there) with an automated way 
+to provide the necessary information to Mailbox Providers, to report message handling actions taken by message recipients, such as "mark as spam", back to the Message Originator.
 
 As described in {{!RFC6449}}, the registration for such a complaint feedback loop needs to be done manually by a human at any Mailbox Provider who provides a complaint feedback loop.
 The key underpinning of {{!RFC6449}} is that access to the complaint feedback loop is a privilege, and that Mailbox Providers are not prepared to send feedback to anyone they cannot reasonably believe are legitimate.
-However, manual registration and management can be quite time-consuming if there are new feedback loops rising up, or if the Message Originator wants to add new IP addresses or DKIM domains.
+However, manual registration and management can be quite time-consuming if there are new feedback loops rising up, or if the Message Originator wants to add new IP addresses, DKIM domains or change their complaint address.
 In addition, a manual process is not well suited and/or feasible for smaller Mailbox Providers.
-Because of the manual process involved, the Message Originator has to go through all providers again, delete his existing subscriptions and register with their new complaint address.
 
-Here we propose that Message Originators add a header field without the need to manually register with each Feedback Provider., and that willing Mailbox Providers can use it to send the Feedback Messages to the specified complaint address.  This simplification or extension of a manual registration and verification process would be another advantage for the Mailbox Providers.
+Here we propose that Message Originators add a header field without the need to manually register with each Feedback Provider, and that willing Mailbox Providers can use it to send the Feedback Messages to the specified complaint address.
+This simplification or extension of a manual registration and verification process would be another advantage for the Mailbox Providers.
 
 A new message header field, rather than a new DNS record, was chosen to easily distinguish between multiple Message Originators without requiring user or administrator intervention.
 For example, if a company uses multiple systems, each system can set this header field on its own without requiring users or administrators to make any changes to their DNS.
 No additional DNS lookup is required of the Mailbox Provider side to obtain the complaint address.
 
-The proposed mechanism is capable of being operated in compliance with the data privacy laws.
+The proposed mechanism is capable of being operated in compliance with the data privacy laws e.g. GDPR or CCPA.
 
 Nevertheless, the described mechanism below potentially permits a kind of man-in-the-middle attack between the domain owner and the recipient.
 A bad actor can generate forged reports to be "from" a domain name the bad actor is attacking and send this reports to the complaint feedback loop address.
@@ -92,7 +92,7 @@ The goal of this experiment is to answer the following questions based on real-w
 - What additional security measures/checks need to be performed at the Mailbox Provider before a Feedback Message is sent?
 - What additional security measures/checks need to be performed at the Message Originator after a Feedback Message is received?
 
-This experiment will be considered successful if the CFBL-Address header field is used by a leading Mailbox Provider in a country and by at least two Message Originators within the next two years
+This experiment will be considered successful if the CFBL-Address header field is used by a leading Mailbox Provider and by at least two Message Originators within the next two years
 and these parties successfully use the address specified in the header field to exchange Feedback Messages.
 
 If this experiment is successful and these header fields prove to be valuable and popular, the header fields may be taken to the IETF for
@@ -103,17 +103,13 @@ For good reasons, the One-Click-Unsubscribe {{?RFC8058}} signaling already exist
 However, this header field requires the List-Unsubscribe header field, whose purpose is to provide the link to unsubscribe from a list.
 For this reason, this header field is only used by operators of broadcast marketing lists or mailing lists, not in normal email traffic.
 
-The main interest of this document now is to provide an automated way to signal Mailbox Providers an address for a complaint feedback loop.
-It is the obligation of the Message Originator to decide for themselves what action to take after receiving a notification; this is not the subject of this document.
-Nevertheless, there is discussion about possible actions and their possible harm in [](#security-considerations).
-
 # Definitions
 The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT", "SHOULD", "SHOULD NOT", "RECOMMENDED", "NOT RECOMMENDED", "MAY", and "OPTIONAL" in this 
 document are to be interpreted as described in BCP 14 {{!RFC2119}} {{!RFC8174}} when, and only when, they appear in all capitals, as shown here.
 
 The key word "CFBL" in this document is the abbreviation for "complaint feedback loop" and will hereafter be used.
 
-Unless otherwise noted, the terminology used in this document is taken from {{!RFC6449}}.
+Syntax descriptions use ABNF {{!RFC5234}} {{!RFC7405}}.
 
 # Requirements
 
@@ -121,8 +117,8 @@ Unless otherwise noted, the terminology used in this document is taken from {{!R
 This section describes the requirements that a received message, the message that is sent from the Message Originator to the Mailbox Provider and about which a report is to be sent later, must meet.
 
 ### Strict
-If the domain in the {{!RFC5322}}.From and the domain in the CFBL-Address header field are identical, this domain MUST be covered by a valid
-{{!DKIM=RFC6376}} signature. In this case, the DKIM "d=" parameter and the {{!RFC5322}}.From field have identical DNS domains.
+If the domain in the {{!RFC5322}}.From and the domain in the CFBL-Address header field are identical, this domain MUST be matched by a valid
+{{!DKIM=RFC6376}} signature. In this case, the DKIM "d=" parameter and the {{!RFC5322}}.From field have identical domains.
 This signature MUST meet the requirements described in [](#received-message-dkim-signature).
 
 The following example meets this case:
@@ -142,28 +138,11 @@ This is a super awesome newsletter.
 ~~~
 
 ### Relaxed
-If the domain in CFBL-Address is a child domain of the {{!RFC5322}}.From, the {{!RFC5322}}.From domain MUST be covered by a valid {{!DKIM=RFC6376}} signature. 
-In this case, the DKIM "d=" parameter and the {{!RFC5322}}.From domain have a identical (Example 1) or parent (Example 2) DNS domains.
+If the domain in CFBL-Address header field is a child domain of the {{!RFC5322}}.From, the {{!RFC5322}}.From domain MUST be matched by a valid {{!DKIM=RFC6376}} signature. 
+In this case, the DKIM "d=" parameter and the {{!RFC5322}}.From domain have a identical (Example 1) or parent (Example 2) domain.
 This signature MUST meet the requirements described in [](#received-message-dkim-signature).
 
 Example 1:
-
-~~~
-Return-Path: <sender@mailer.example.com>
-From: Awesome Newsletter <newsletter@example.com>
-To: receiver@example.org
-Subject: Super awesome deals for you
-CFBL-Address: fbl@mailer.example.com; report=arf
-Message-ID: <a37e51bf-3050-2aab-1234-543a0828d14a@mailer.example.com>
-Content-Type: text/plain; charset=utf-8
-DKIM-Signature: v=1; a=rsa-sha256; d=example.com;
-      h=Content-Type:Subject:From:To:Message-ID:
-      CFBL-Feedback-ID:CFBL-Address;
-
-This is a super awesome newsletter.
-~~~
-
-Example 2:
 
 ~~~
 Return-Path: <sender@mailer.example.com>
@@ -180,23 +159,40 @@ DKIM-Signature: v=1; a=rsa-sha256; d=example.com;
 This is a super awesome newsletter.
 ~~~
 
-### Third Party Address
-If the domain in {{!RFC5322}}.From differs from the domain in the CFBL-Address header field, the domain of the CFBL-Address header field MUST be covered by an additional valid {{!DKIM=RFC6376}} signature.
-Both signatures MUST meet the requirements described in [](#received-message-dkim-signature).
+Example 2:
 
+~~~
+Return-Path: <sender@mailer.example.com>
+From: Awesome Newsletter <newsletter@example.com>
+To: receiver@example.org
+Subject: Super awesome deals for you
+CFBL-Address: fbl@mailer.example.com; report=arf
+Message-ID: <a37e51bf-3050-2aab-1234-543a0828d14a@mailer.example.com>
+Content-Type: text/plain; charset=utf-8
+DKIM-Signature: v=1; a=rsa-sha256; d=example.com;
+      h=Content-Type:Subject:From:To:Message-ID:
+      CFBL-Feedback-ID:CFBL-Address;
+
+This is a super awesome newsletter.
+~~~
+
+### Third Party Address
+If the domain in {{!RFC5322}}.From differs from the domain in the CFBL-Address header field, an additional valid {{!DKIM=RFC6376}} signature MUST be added that matches the domain in the CFBL-Address header field.
+The other existing valid {{!DKIM=RFC6376}} signature MUST match the domain in the {{!RFC5322}}.From header field. 
 This double DKIM signature ensures that both, the domain owner of the {{!RFC5322}}.From domain and the domain owner of the CFBL-Address domain, agree who should receive the Feedback Messages.
+Both signature MUST meet the requirements described in [](#received-message-dkim-signature).
 
 The following example meets this case:
 
 ~~~
-Return-Path: <sender@super-saas-mailer.com>
+Return-Path: <sender@saas-mailer.example>
 From: Awesome Newsletter <newsletter@example.com>
 To: receiver@example.org
 Subject: Super awesome deals for you
-CFBL-Address: fbl@super-saas-mailer.com; report=arf
+CFBL-Address: fbl@saas-mailer.example; report=arf
 Message-ID: <a37e51bf-3050-2aab-1234-543a0828d14a@example.com>
 Content-Type: text/plain; charset=utf-8
-DKIM-Signature: v=1; a=rsa-sha256; d=super-saas-mailer.com; s=system;
+DKIM-Signature: v=1; a=rsa-sha256; d=saas-mailer.example; s=system;
        h=Subject:From:To:Message-ID:CFBL-Feedback-ID:CFBL-Address;
 DKIM-Signature: v=1; a=rsa-sha256; d=example.com; s=news;
        h=Subject:From:To:Message-ID:CFBL-Feedback-ID:CFBL-Address;
@@ -210,8 +206,6 @@ Therefore, the pre-signed message MUST NOT include "CFBL-Address" and "CFBL-Feed
 
 This way the Email Service Provider has the possibility to accept the pre-signed messages and can inject their own CFBL-Address.
 
-Due to this granted exception a malicious actor can destroy this possibility with over-signing. This potential harm is described in [](#security-considerations).
-
 The following example meets this case:
 
 ~~~
@@ -219,21 +213,24 @@ Return-Path: <newsletter@example.com>
 From: Awesome Newsletter <newsletter@example.com>
 To: receiver@example.org
 Subject: Super awesome deals for you
-CFBL-Address: fbl@super-saas-mailer.com; report=arf
+CFBL-Address: fbl@saas-mailer.example; report=arf
 Message-ID: <a37e51bf-3050-2aab-1234-543a0828d14a@example.com>
 Content-Type: text/plain; charset=utf-8
 DKIM-Signature: v=1; a=rsa-sha256; d=example.com; s=news;
        h=Subject:From:To:Message-ID;
-DKIM-Signature: v=1; a=rsa-sha256; d=super-saas-mailer.com; s=system;
+DKIM-Signature: v=1; a=rsa-sha256; d=saas-mailer.example; s=system;
        h=Subject:From:To:Message-ID:CFBL-Feedback-ID:CFBL-Address;
 
 This is a super awesome newsletter.
 ~~~
 
 ### DKIM Signature {#received-message-dkim-signature}
-When present, CFBL-Address and CFBL-Feedback-ID header fields MUST be included in the "h=" tag of the aforementioned valid DKIM-Signature.
+When present, CFBL-Address and CFBL-Feedback-ID header fields MUST be included in the "h=" tag of the aforementioned valid DKIM signature.
 
-If the domain has neither the required coverage by a valid DKIM signature nor the required header field coverage by the "h=" tag, the Mailbox Provider SHALL NOT send a report message.
+If the domain is neither matched by a valid DKIM signature nor the header field is covered by the "h=" tag, the Mailbox Provider SHALL NOT send a report message.
+
+## Multiple CFBL-Address Header Fields
+A Message can only have exactly one CFBL-Address header field. All further occurrences of the CFBL-Address header field MUST be ignored after the first valid occurrence.
 
 ## CFBL-Feedback-ID Header Field {#cfbl-feedback-id-header-field}
 The Message Originator MAY include a CFBL-Feedback-ID header field in its messages out of various reasons, e.g. their feedback loop processing system can't do anything with the Message-ID header field.
@@ -247,14 +244,15 @@ The Message Originator can OPTIONALLY request a {{XARF}} report, as described in
 
 ## Feedback Message {#complaint-report}
 The Feedback Message (sent by Mailbox Provider to the address provided in the CFBL-Address header field) MUST have a valid {{!DKIM=RFC6376}} signature.
+This signature MUST match the {{!RFC5322}}.From domain of the Feedback Message.
 
 If the message does not have the required valid {{!DKIM=RFC6376}} signature, the Message Originator SHALL NOT process this Feedback Message.
 
 The Feedback Message MUST be a {{!ARF=RFC5965}} or {{XARF}} report.
 If the Message Originator requests it (described in [](#xarf-report)), and it is technically possible for the Mailbox Provider to do so, the Feedback Message MUST be a {{XARF}} report, otherwise the Feedback Message MUST be a {{!ARF=RFC5965}} report.
 
-The {{!ARF=RFC5965}} or {{XARF}} report MUST contain the Message-ID {{!MAIL=RFC5322}}.
-If present, the header field "CFBL-Feedback-ID" of the received message MUST be added additionally to the {{!ARF=RFC5965}} or {{XARF}} report.
+The third MIME part of the {{!ARF=RFC5965}} or the "Samples" section of the {{XARF}} report MUST contain the Message-ID {{!MAIL=RFC5322}} of the received message.
+If present, the header field "CFBL-Feedback-ID" of the received message MUST be added additionally to the third MIME part of the {{!ARF=RFC5965}} or to "Samples" section of the {{XARF}} report.
 
 The Mailbox Provider MAY omit or redact, as described in {{?RFC6590}}, all further header fields and/or body to comply with any data-regulation laws.
 
@@ -281,20 +279,22 @@ The Message Originator MUST take action to address the described requirements in
 A Mailbox Provider who wants to collect user actions that indicate the message was not wanted and send a Feedback Message to the Message Originator, 
 they MAY query the CFBL-Address header field and forward the report to the provided complaint feedback loop address.
 
-The Mailbox Provider MUST validate and take action to address the described requirements in [Requirements](#requirements).
+The Mailbox Provider MUST validate the requirements described in [Requirements](#requirements) and 
+MUST take action to address the requirements described in [Requirements](#requirements) when sending Feedback Messages.
 
 # Header Field Syntax
 
 ## CFBL-Address {#cfbl-address-header-field}
-The following ABNF imports fields, WSP, CRLF and addr-spec from {{!MAIL=RFC5322}}.
+The following ABNF imports fields, CFWS, CRLF and addr-spec from {{!MAIL=RFC5322}}.
+The CFBL-Address header field is compatible with {{!RFC6532}}.
 
 ~~~ abnf
 fields =/ cfbl-address
 
-cfbl-address = "CFBL-Address:" 0*1WSP addr-spec
-               [";" 0*1WSP report-format] CRLF
+cfbl-address = "CFBL-Address:" CFWS addr-spec
+               [";" CFWS report-format] CRLF
 
-report-format = "report=" ("arf" / "xarf")
+report-format = %s"report=" (%s"arf" / %s"xarf")
 ~~~
 
 ## CFBL-Feedback-ID
@@ -303,10 +303,13 @@ The following ABNF imports fields, WSP, CRLF and atext from {{!MAIL=RFC5322}}.
 ~~~ abnf
 fields =/ cfbl-feedback-id
 
-cfbl-feedback-id = "CFBL-Feedback-ID:" 0*1WSP fid CRLF
+cfbl-feedback-id = "CFBL-Feedback-ID:" CFWS fid CRLF
 
-fid = 1*(atext / ":")
+fid = 1*(atext / ":" / CFWS)
 ~~~
+
+Whitespace is ignored in the fid value and MUST be ignored when reassembling the original feedback id.  
+In particular, when adding the header field the Message Originator can safely insert CFWS in the fid value in arbitrary places to conform to line-length limits.
 
 # Security Considerations {#security-considerations}
 This section discusses possible security issues, and their possible solutions, of a complaint feedback loop address header field.
@@ -355,13 +358,6 @@ As the Mailbox Provider now generates an automatic Feedback Message for the rece
 
 The receiving Mailbox Provider must take appropriate measures. One possible countermeasure could be, for example, pre-existing reputation data, usually proprietary data.
 Using this data, the Mailbox Provider can assess the trustworthiness of a Message Originator and decide whether to send a Feedback Message based on this information.
-
-## Over-Signing when Accepting Pre-Signed Emails
-When accepting pre-signed mails, a malicious actor can destroy the possibility of adding the CFBL-Address header field by the Email Service Provider, with "over-signing".
-The methode "over-signing" is described in {{Section 5.4 of DKIM}}.
-
-The Email Service Provider must take appropriate measures.
-Email Service Providers therefore have - mostly proprietary - methods for assessing the trustworthiness of an account and decide on this basis whether to accept pre-signed messages.
 
 # IANA Considerations
 
@@ -536,7 +532,7 @@ CFBL-Feedback-ID: 3789e1ae1938aa2f0dfdfa48b20d8f8bc6c21ac34fc5023d
 
 # Acknowledgments
 Technical and editorial reviews were provided by the colleagues at CleverReach, 
-the colleagues at Certified Senders Alliance and eco.de, Levent Ulucan (Inxmail), 
-Arne Allisat and Tobias Herkula (1&1 Mail & Media) and Sven Krohlas (BFK Edv-consulting).
+the colleagues at Certified Senders Alliance and eco.de, 
+Arne Allisat, Tobias Herkula and Levent Ulucan (1&1 Mail & Media) and Sven Krohlas (BFK Edv-consulting).
 
 --- back

@@ -12,7 +12,7 @@
 ]>
 
 
-<rfc ipr="trust200902" docName="draft-benecke-cfbl-address-header-10" category="exp" submissionType="independent" tocInclude="true" sortRefs="true" symRefs="true">
+<rfc ipr="trust200902" docName="draft-benecke-cfbl-address-header-11" category="exp" submissionType="independent" tocInclude="true" sortRefs="true" symRefs="true">
   <front>
     <title abbrev="CFBL Address Header">Complaint Feedback Loop Address Header</title>
 
@@ -30,7 +30,7 @@
       </address>
     </author>
 
-    <date year="2023" month="February" day="24"/>
+    <date year="2023" month="May" day="06"/>
 
     <area>art</area>
     <workgroup>Network Working Group</workgroup>
@@ -59,22 +59,22 @@ and was not subject to the IETF's approval process.</t>
 
 
 <section anchor="introduction-and-motivation"><name>Introduction and Motivation</name>
-<t>The topic and goal of this document is to extend the complaint feedback loop recommendations described in <xref target="RFC6449"/> with an automated way to provide the necessary information to Mailbox Providers, 
-to report message handling actions taken by message recipients, such as "mark as spam", back to the Message Originator.</t>
+<t>The topic and goal of this document is to extend the complaint feedback loop recommendations described in <xref target="RFC6449"/> (the terminology used in this document hereafter is taken from there) with an automated way 
+to provide the necessary information to Mailbox Providers, to report message handling actions taken by message recipients, such as "mark as spam", back to the Message Originator.</t>
 
 <t>As described in <xref target="RFC6449"/>, the registration for such a complaint feedback loop needs to be done manually by a human at any Mailbox Provider who provides a complaint feedback loop.
 The key underpinning of <xref target="RFC6449"/> is that access to the complaint feedback loop is a privilege, and that Mailbox Providers are not prepared to send feedback to anyone they cannot reasonably believe are legitimate.
-However, manual registration and management can be quite time-consuming if there are new feedback loops rising up, or if the Message Originator wants to add new IP addresses or DKIM domains.
-In addition, a manual process is not well suited and/or feasible for smaller Mailbox Providers.
-Because of the manual process involved, the Message Originator has to go through all providers again, delete his existing subscriptions and register with their new complaint address.</t>
+However, manual registration and management can be quite time-consuming if there are new feedback loops rising up, or if the Message Originator wants to add new IP addresses, DKIM domains or change their complaint address.
+In addition, a manual process is not well suited and/or feasible for smaller Mailbox Providers.</t>
 
-<t>Here we propose that Message Originators add a header field without the need to manually register with each Feedback Provider., and that willing Mailbox Providers can use it to send the Feedback Messages to the specified complaint address.  This simplification or extension of a manual registration and verification process would be another advantage for the Mailbox Providers.</t>
+<t>Here we propose that Message Originators add a header field without the need to manually register with each Feedback Provider, and that willing Mailbox Providers can use it to send the Feedback Messages to the specified complaint address.
+This simplification or extension of a manual registration and verification process would be another advantage for the Mailbox Providers.</t>
 
 <t>A new message header field, rather than a new DNS record, was chosen to easily distinguish between multiple Message Originators without requiring user or administrator intervention.
 For example, if a company uses multiple systems, each system can set this header field on its own without requiring users or administrators to make any changes to their DNS.
 No additional DNS lookup is required of the Mailbox Provider side to obtain the complaint address.</t>
 
-<t>The proposed mechanism is capable of being operated in compliance with the data privacy laws.</t>
+<t>The proposed mechanism is capable of being operated in compliance with the data privacy laws e.g. GDPR or CCPA.</t>
 
 <t>Nevertheless, the described mechanism below potentially permits a kind of man-in-the-middle attack between the domain owner and the recipient.
 A bad actor can generate forged reports to be "from" a domain name the bad actor is attacking and send this reports to the complaint feedback loop address.
@@ -106,7 +106,7 @@ Feedback on the results of this experiment can be emailed to the author, raised 
   <t>What additional security measures/checks need to be performed at the Message Originator after a Feedback Message is received?</t>
 </list></t>
 
-<t>This experiment will be considered successful if the CFBL-Address header field is used by a leading Mailbox Provider in a country and by at least two Message Originators within the next two years
+<t>This experiment will be considered successful if the CFBL-Address header field is used by a leading Mailbox Provider and by at least two Message Originators within the next two years
 and these parties successfully use the address specified in the header field to exchange Feedback Messages.</t>
 
 <t>If this experiment is successful and these header fields prove to be valuable and popular, the header fields may be taken to the IETF for
@@ -118,10 +118,6 @@ further discussion and revision.</t>
 However, this header field requires the List-Unsubscribe header field, whose purpose is to provide the link to unsubscribe from a list.
 For this reason, this header field is only used by operators of broadcast marketing lists or mailing lists, not in normal email traffic.</t>
 
-<t>The main interest of this document now is to provide an automated way to signal Mailbox Providers an address for a complaint feedback loop.
-It is the obligation of the Message Originator to decide for themselves what action to take after receiving a notification; this is not the subject of this document.
-Nevertheless, there is discussion about possible actions and their possible harm in <xref target="security-considerations"></xref>.</t>
-
 </section>
 </section>
 <section anchor="definitions"><name>Definitions</name>
@@ -130,7 +126,7 @@ document are to be interpreted as described in BCP 14 <xref target="RFC2119"/> <
 
 <t>The key word "CFBL" in this document is the abbreviation for "complaint feedback loop" and will hereafter be used.</t>
 
-<t>Unless otherwise noted, the terminology used in this document is taken from <xref target="RFC6449"/>.</t>
+<t>Syntax descriptions use ABNF <xref target="RFC5234"/> <xref target="RFC7405"/>.</t>
 
 </section>
 <section anchor="requirements"><name>Requirements</name>
@@ -139,8 +135,8 @@ document are to be interpreted as described in BCP 14 <xref target="RFC2119"/> <
 <t>This section describes the requirements that a received message, the message that is sent from the Message Originator to the Mailbox Provider and about which a report is to be sent later, must meet.</t>
 
 <section anchor="strict"><name>Strict</name>
-<t>If the domain in the <xref target="RFC5322"/>.From and the domain in the CFBL-Address header field are identical, this domain MUST be covered by a valid
-<xref target="DKIM"/> signature. In this case, the DKIM "d=" parameter and the <xref target="RFC5322"/>.From field have identical DNS domains.
+<t>If the domain in the <xref target="RFC5322"/>.From and the domain in the CFBL-Address header field are identical, this domain MUST be matched by a valid
+<xref target="DKIM"/> signature. In this case, the DKIM "d=" parameter and the <xref target="RFC5322"/>.From field have identical domains.
 This signature MUST meet the requirements described in <xref target="received-message-dkim-signature"></xref>.</t>
 
 <t>The following example meets this case:</t>
@@ -161,28 +157,11 @@ This is a super awesome newsletter.
 
 </section>
 <section anchor="relaxed"><name>Relaxed</name>
-<t>If the domain in CFBL-Address is a child domain of the <xref target="RFC5322"/>.From, the <xref target="RFC5322"/>.From domain MUST be covered by a valid <xref target="DKIM"/> signature. 
-In this case, the DKIM "d=" parameter and the <xref target="RFC5322"/>.From domain have a identical (Example 1) or parent (Example 2) DNS domains.
+<t>If the domain in CFBL-Address header field is a child domain of the <xref target="RFC5322"/>.From, the <xref target="RFC5322"/>.From domain MUST be matched by a valid <xref target="DKIM"/> signature. 
+In this case, the DKIM "d=" parameter and the <xref target="RFC5322"/>.From domain have a identical (Example 1) or parent (Example 2) domain.
 This signature MUST meet the requirements described in <xref target="received-message-dkim-signature"></xref>.</t>
 
 <t>Example 1:</t>
-
-<figure><artwork><![CDATA[
-Return-Path: <sender@mailer.example.com>
-From: Awesome Newsletter <newsletter@example.com>
-To: receiver@example.org
-Subject: Super awesome deals for you
-CFBL-Address: fbl@mailer.example.com; report=arf
-Message-ID: <a37e51bf-3050-2aab-1234-543a0828d14a@mailer.example.com>
-Content-Type: text/plain; charset=utf-8
-DKIM-Signature: v=1; a=rsa-sha256; d=example.com;
-      h=Content-Type:Subject:From:To:Message-ID:
-      CFBL-Feedback-ID:CFBL-Address;
-
-This is a super awesome newsletter.
-]]></artwork></figure>
-
-<t>Example 2:</t>
 
 <figure><artwork><![CDATA[
 Return-Path: <sender@mailer.example.com>
@@ -199,24 +178,41 @@ DKIM-Signature: v=1; a=rsa-sha256; d=example.com;
 This is a super awesome newsletter.
 ]]></artwork></figure>
 
+<t>Example 2:</t>
+
+<figure><artwork><![CDATA[
+Return-Path: <sender@mailer.example.com>
+From: Awesome Newsletter <newsletter@example.com>
+To: receiver@example.org
+Subject: Super awesome deals for you
+CFBL-Address: fbl@mailer.example.com; report=arf
+Message-ID: <a37e51bf-3050-2aab-1234-543a0828d14a@mailer.example.com>
+Content-Type: text/plain; charset=utf-8
+DKIM-Signature: v=1; a=rsa-sha256; d=example.com;
+      h=Content-Type:Subject:From:To:Message-ID:
+      CFBL-Feedback-ID:CFBL-Address;
+
+This is a super awesome newsletter.
+]]></artwork></figure>
+
 </section>
 <section anchor="third-party-address"><name>Third Party Address</name>
-<t>If the domain in <xref target="RFC5322"/>.From differs from the domain in the CFBL-Address header field, the domain of the CFBL-Address header field MUST be covered by an additional valid <xref target="DKIM"/> signature.
-Both signatures MUST meet the requirements described in <xref target="received-message-dkim-signature"></xref>.</t>
-
-<t>This double DKIM signature ensures that both, the domain owner of the <xref target="RFC5322"/>.From domain and the domain owner of the CFBL-Address domain, agree who should receive the Feedback Messages.</t>
+<t>If the domain in <xref target="RFC5322"/>.From differs from the domain in the CFBL-Address header field, an additional valid <xref target="DKIM"/> signature MUST be added that matches the domain in the CFBL-Address header field.
+The other existing valid <xref target="DKIM"/> signature MUST match the domain in the <xref target="RFC5322"/>.From header field. 
+This double DKIM signature ensures that both, the domain owner of the <xref target="RFC5322"/>.From domain and the domain owner of the CFBL-Address domain, agree who should receive the Feedback Messages.
+Both signature MUST meet the requirements described in <xref target="received-message-dkim-signature"></xref>.</t>
 
 <t>The following example meets this case:</t>
 
 <figure><artwork><![CDATA[
-Return-Path: <sender@super-saas-mailer.com>
+Return-Path: <sender@saas-mailer.example>
 From: Awesome Newsletter <newsletter@example.com>
 To: receiver@example.org
 Subject: Super awesome deals for you
-CFBL-Address: fbl@super-saas-mailer.com; report=arf
+CFBL-Address: fbl@saas-mailer.example; report=arf
 Message-ID: <a37e51bf-3050-2aab-1234-543a0828d14a@example.com>
 Content-Type: text/plain; charset=utf-8
-DKIM-Signature: v=1; a=rsa-sha256; d=super-saas-mailer.com; s=system;
+DKIM-Signature: v=1; a=rsa-sha256; d=saas-mailer.example; s=system;
        h=Subject:From:To:Message-ID:CFBL-Feedback-ID:CFBL-Address;
 DKIM-Signature: v=1; a=rsa-sha256; d=example.com; s=news;
        h=Subject:From:To:Message-ID:CFBL-Feedback-ID:CFBL-Address;
@@ -230,8 +226,6 @@ Therefore, the pre-signed message MUST NOT include "CFBL-Address" and "CFBL-Feed
 
 <t>This way the Email Service Provider has the possibility to accept the pre-signed messages and can inject their own CFBL-Address.</t>
 
-<t>Due to this granted exception a malicious actor can destroy this possibility with over-signing. This potential harm is described in <xref target="security-considerations"></xref>.</t>
-
 <t>The following example meets this case:</t>
 
 <figure><artwork><![CDATA[
@@ -239,12 +233,12 @@ Return-Path: <newsletter@example.com>
 From: Awesome Newsletter <newsletter@example.com>
 To: receiver@example.org
 Subject: Super awesome deals for you
-CFBL-Address: fbl@super-saas-mailer.com; report=arf
+CFBL-Address: fbl@saas-mailer.example; report=arf
 Message-ID: <a37e51bf-3050-2aab-1234-543a0828d14a@example.com>
 Content-Type: text/plain; charset=utf-8
 DKIM-Signature: v=1; a=rsa-sha256; d=example.com; s=news;
        h=Subject:From:To:Message-ID;
-DKIM-Signature: v=1; a=rsa-sha256; d=super-saas-mailer.com; s=system;
+DKIM-Signature: v=1; a=rsa-sha256; d=saas-mailer.example; s=system;
        h=Subject:From:To:Message-ID:CFBL-Feedback-ID:CFBL-Address;
 
 This is a super awesome newsletter.
@@ -252,11 +246,15 @@ This is a super awesome newsletter.
 
 </section>
 <section anchor="received-message-dkim-signature"><name>DKIM Signature</name>
-<t>When present, CFBL-Address and CFBL-Feedback-ID header fields MUST be included in the "h=" tag of the aforementioned valid DKIM-Signature.</t>
+<t>When present, CFBL-Address and CFBL-Feedback-ID header fields MUST be included in the "h=" tag of the aforementioned valid DKIM signature.</t>
 
-<t>If the domain has neither the required coverage by a valid DKIM signature nor the required header field coverage by the "h=" tag, the Mailbox Provider SHALL NOT send a report message.</t>
+<t>If the domain is neither matched by a valid DKIM signature nor the header field is covered by the "h=" tag, the Mailbox Provider SHALL NOT send a report message.</t>
 
 </section>
+</section>
+<section anchor="multiple-cfbl-address-header-fields"><name>Multiple CFBL-Address Header Fields</name>
+<t>A Message can only have exactly one CFBL-Address header field. All further occurrences of the CFBL-Address header field MUST be ignored after the first valid occurrence.</t>
+
 </section>
 <section anchor="cfbl-feedback-id-header-field"><name>CFBL-Feedback-ID Header Field</name>
 <t>The Message Originator MAY include a CFBL-Feedback-ID header field in its messages out of various reasons, e.g. their feedback loop processing system can't do anything with the Message-ID header field.</t>
@@ -271,15 +269,16 @@ This is a super awesome newsletter.
 
 </section>
 <section anchor="complaint-report"><name>Feedback Message</name>
-<t>The Feedback Message (sent by Mailbox Provider to the address provided in the CFBL-Address header field) MUST have a valid <xref target="DKIM"/> signature.</t>
+<t>The Feedback Message (sent by Mailbox Provider to the address provided in the CFBL-Address header field) MUST have a valid <xref target="DKIM"/> signature.
+This signature MUST match the <xref target="RFC5322"/>.From domain of the Feedback Message.</t>
 
 <t>If the message does not have the required valid <xref target="DKIM"/> signature, the Message Originator SHALL NOT process this Feedback Message.</t>
 
 <t>The Feedback Message MUST be a <xref target="ARF"/> or <xref target="XARF"/> report.
 If the Message Originator requests it (described in <xref target="xarf-report"></xref>), and it is technically possible for the Mailbox Provider to do so, the Feedback Message MUST be a <xref target="XARF"/> report, otherwise the Feedback Message MUST be a <xref target="ARF"/> report.</t>
 
-<t>The <xref target="ARF"/> or <xref target="XARF"/> report MUST contain the Message-ID <xref target="MAIL"/>.
-If present, the header field "CFBL-Feedback-ID" of the received message MUST be added additionally to the <xref target="ARF"/> or <xref target="XARF"/> report.</t>
+<t>The third MIME part of the <xref target="ARF"/> or the "Samples" section of the <xref target="XARF"/> report MUST contain the Message-ID <xref target="MAIL"/> of the received message.
+If present, the header field "CFBL-Feedback-ID" of the received message MUST be added additionally to the third MIME part of the <xref target="ARF"/> or to "Samples" section of the <xref target="XARF"/> report.</t>
 
 <t>The Mailbox Provider MAY omit or redact, as described in <xref target="RFC6590"/>, all further header fields and/or body to comply with any data-regulation laws.</t>
 
@@ -310,22 +309,24 @@ CFBL-Address: fbl@example.com; report=xarf
 <t>A Mailbox Provider who wants to collect user actions that indicate the message was not wanted and send a Feedback Message to the Message Originator, 
 they MAY query the CFBL-Address header field and forward the report to the provided complaint feedback loop address.</t>
 
-<t>The Mailbox Provider MUST validate and take action to address the described requirements in <xref target="requirements"></xref>.</t>
+<t>The Mailbox Provider MUST validate the requirements described in <xref target="requirements"></xref> and 
+MUST take action to address the requirements described in <xref target="requirements"></xref> when sending Feedback Messages.</t>
 
 </section>
 </section>
 <section anchor="header-field-syntax"><name>Header Field Syntax</name>
 
 <section anchor="cfbl-address-header-field"><name>CFBL-Address</name>
-<t>The following ABNF imports fields, WSP, CRLF and addr-spec from <xref target="MAIL"/>.</t>
+<t>The following ABNF imports fields, CFWS, CRLF and addr-spec from <xref target="MAIL"/>.
+The CFBL-Address header field is compatible with <xref target="RFC6532"/>.</t>
 
 <figure><sourcecode type="abnf"><![CDATA[
 fields =/ cfbl-address
 
-cfbl-address = "CFBL-Address:" 0*1WSP addr-spec
-               [";" 0*1WSP report-format] CRLF
+cfbl-address = "CFBL-Address:" CFWS addr-spec
+               [";" CFWS report-format] CRLF
 
-report-format = "report=" ("arf" / "xarf")
+report-format = %s"report=" (%s"arf" / %s"xarf")
 ]]></sourcecode></figure>
 
 </section>
@@ -335,10 +336,13 @@ report-format = "report=" ("arf" / "xarf")
 <figure><sourcecode type="abnf"><![CDATA[
 fields =/ cfbl-feedback-id
 
-cfbl-feedback-id = "CFBL-Feedback-ID:" 0*1WSP fid CRLF
+cfbl-feedback-id = "CFBL-Feedback-ID:" CFWS fid CRLF
 
-fid = 1*(atext / ":")
+fid = 1*(atext / ":" / CFWS)
 ]]></sourcecode></figure>
+
+<t>Whitespace is ignored in the fid value and MUST be ignored when reassembling the original feedback id.<br />
+In particular, when adding the header field the Message Originator can safely insert CFWS in the fid value in arbitrary places to conform to line-length limits.</t>
 
 </section>
 </section>
@@ -393,14 +397,6 @@ As the Mailbox Provider now generates an automatic Feedback Message for the rece
 
 <t>The receiving Mailbox Provider must take appropriate measures. One possible countermeasure could be, for example, pre-existing reputation data, usually proprietary data.
 Using this data, the Mailbox Provider can assess the trustworthiness of a Message Originator and decide whether to send a Feedback Message based on this information.</t>
-
-</section>
-<section anchor="over-signing-when-accepting-pre-signed-emails"><name>Over-Signing when Accepting Pre-Signed Emails</name>
-<t>When accepting pre-signed mails, a malicious actor can destroy the possibility of adding the CFBL-Address header field by the Email Service Provider, with "over-signing".
-The methode "over-signing" is described in <xref section="5.4" sectionFormat="of" target="DKIM"/>.</t>
-
-<t>The Email Service Provider must take appropriate measures.
-Email Service Providers therefore have - mostly proprietary - methods for assessing the trustworthiness of an account and decide on this basis whether to accept pre-signed messages.</t>
 
 </section>
 </section>
@@ -584,8 +580,8 @@ CFBL-Feedback-ID: 3789e1ae1938aa2f0dfdfa48b20d8f8bc6c21ac34fc5023d
 </section>
 <section anchor="acknowledgments"><name>Acknowledgments</name>
 <t>Technical and editorial reviews were provided by the colleagues at CleverReach, 
-the colleagues at Certified Senders Alliance and eco.de, Levent Ulucan (Inxmail), 
-Arne Allisat and Tobias Herkula (1&amp;1 Mail &amp; Media) and Sven Krohlas (BFK Edv-consulting).</t>
+the colleagues at Certified Senders Alliance and eco.de, 
+Arne Allisat, Tobias Herkula and Levent Ulucan (1&amp;1 Mail &amp; Media) and Sven Krohlas (BFK Edv-consulting).</t>
 
 </section>
 
@@ -652,6 +648,34 @@ Arne Allisat and Tobias Herkula (1&amp;1 Mail &amp; Media) and Sven Krohlas (BFK
 
 
 
+<reference anchor='RFC5234'>
+<front>
+<title>Augmented BNF for Syntax Specifications: ABNF</title>
+<author fullname='D. Crocker' initials='D.' role='editor' surname='Crocker'><organization/></author>
+<author fullname='P. Overell' initials='P.' surname='Overell'><organization/></author>
+<date month='January' year='2008'/>
+<abstract><t>Internet technical specifications often need to define a formal syntax.  Over the years, a modified version of Backus-Naur Form (BNF), called Augmented BNF (ABNF), has been popular among many Internet specifications.  The current specification documents ABNF. It balances compactness and simplicity with reasonable representational power.  The differences between standard BNF and ABNF involve naming rules, repetition, alternatives, order-independence, and value ranges.  This specification also supplies additional rule definitions and encoding for a core lexical analyzer of the type common to several Internet specifications.  [STANDARDS-TRACK]</t></abstract>
+</front>
+<seriesInfo name='STD' value='68'/>
+<seriesInfo name='RFC' value='5234'/>
+<seriesInfo name='DOI' value='10.17487/RFC5234'/>
+</reference>
+
+
+
+<reference anchor='RFC7405'>
+<front>
+<title>Case-Sensitive String Support in ABNF</title>
+<author fullname='P. Kyzivat' initials='P.' surname='Kyzivat'><organization/></author>
+<date month='December' year='2014'/>
+<abstract><t>This document extends the base definition of ABNF (Augmented Backus-Naur Form) to include a way to specify US-ASCII string literals that are matched in a case-sensitive manner.</t></abstract>
+</front>
+<seriesInfo name='RFC' value='7405'/>
+<seriesInfo name='DOI' value='10.17487/RFC7405'/>
+</reference>
+
+
+
 <reference anchor='RFC5322'>
 <front>
 <title>Internet Message Format</title>
@@ -705,6 +729,21 @@ Arne Allisat and Tobias Herkula (1&amp;1 Mail &amp; Media) and Sven Krohlas (BFK
 </front>
 <seriesInfo name='RFC' value='5322'/>
 <seriesInfo name='DOI' value='10.17487/RFC5322'/>
+</reference>
+
+
+
+<reference anchor='RFC6532'>
+<front>
+<title>Internationalized Email Headers</title>
+<author fullname='A. Yang' initials='A.' surname='Yang'><organization/></author>
+<author fullname='S. Steele' initials='S.' surname='Steele'><organization/></author>
+<author fullname='N. Freed' initials='N.' surname='Freed'><organization/></author>
+<date month='February' year='2012'/>
+<abstract><t>Internet mail was originally limited to 7-bit ASCII.  MIME added support for the use of 8-bit character sets in body parts, and also defined an encoded-word construct so other character sets could be used in certain header field values.  However, full internationalization of electronic mail requires additional enhancements to allow the use of Unicode, including characters outside the ASCII repertoire, in mail addresses as well as direct use of Unicode in header fields like &quot;From:&quot;, &quot;To:&quot;, and &quot;Subject:&quot;, without requiring the use of complex encoded-word constructs.  This document specifies an enhancement to the Internet Message Format and to MIME that allows use of Unicode in mail addresses and most header field content.</t><t>This specification updates Section 6.4 of RFC 2045 to eliminate the restriction prohibiting the use of non-identity content-transfer- encodings on subtypes of &quot;message/&quot;.  [STANDARDS-TRACK]</t></abstract>
+</front>
+<seriesInfo name='RFC' value='6532'/>
+<seriesInfo name='DOI' value='10.17487/RFC6532'/>
 </reference>
 
 
@@ -785,170 +824,169 @@ Arne Allisat and Tobias Herkula (1&amp;1 Mail &amp; Media) and Sven Krohlas (BFK
   </back>
 
 <!-- ##markdown-source:
-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
-AAA=
+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
 
 -->
 
