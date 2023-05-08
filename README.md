@@ -2,6 +2,6 @@
 
 https://datatracker.ietf.org/doc/draft-benecke-cfbl-address-header/
 
-# Example code
+## Example code
 
 - https://github.com/jpbede/cfbl-reporter
