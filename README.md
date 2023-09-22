@@ -9,6 +9,6 @@ Currently, providing and maintaining such an address is a manual and time-consum
 
 - https://github.com/jpbede/cfbl-reporter
 
-## User
+## Users
 
 - https://abusix.com/feedback-loops/
